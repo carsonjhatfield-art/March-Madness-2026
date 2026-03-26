@@ -14,8 +14,9 @@ Analysis of the **BUSTin Bracketz 2026** ESPN Tournament Challenge group.
 March Madness Analysis/
 ├── QUICK_START_GUIDE.md              ← You are here
 ├── BUSTin_Bracketz_Elimination_Analysis.xlsx  ← Main analysis workbook (4 sheets)
+├── update_game_overview.py           ← Regeneration script (updates index.html with game results)
 ├── march-madness-2026/
-│   └── index.html                    ← Live visualization (deployed via GitHub Pages)
+│   └── index.html                    ← Live visualization — two tabs: Bracket View + Game Overview
 └── data/
     ├── group_standings_2026-03-26.csv         ← Raw scraped standings data
     ├── bracket_picks_2026-03-26.csv           ← All 21 brackets' S16/E8/F4 picks
@@ -31,7 +32,8 @@ March Madness Analysis/
 | File | Description |
 |------|-------------|
 | `BUSTin_Bracketz_Elimination_Analysis.xlsx` | Four-sheet workbook: Group Standings, Permutation Analysis, Elimination Summary, Key Stats |
-| `march-madness-2026/index.html` | Interactive bracket visualization — all 13 non-eliminated brackets with dropdown selector, S16 elimination analysis, and path-to-victory breakdown. Deployed via GitHub Pages. |
+| `update_game_overview.py` | Regeneration script — pass winning team abbreviations as args to lock in results and regenerate `index.html` with updated percentages for both tabs. Usage: `python3 update_game_overview.py TEX IOWA ARIZ` |
+| `march-madness-2026/index.html` | Combined interactive visualization with two tabs: **Bracket View** (per-bracket path to victory with S16 elimination analysis) and **Game Overview** (per-game matchup showing which brackets prefer each outcome). Deployed via GitHub Pages. |
 | `data/group_standings_2026-03-26.csv` | Raw CSV of group standings scraped from ESPN (for reuse without re-scraping) |
 | `data/bracket_picks_2026-03-26.csv` | All 21 brackets' picks for S16 (8 slots), E8 (4 slots), F4 (2 slots) + champion pick, current PTS, elimination status |
 | `data/tournament_metadata_2026-03-26.json` | Sweet 16 matchup slot mapping, scoring rules (40/80/160/320), and team abbreviations |
@@ -60,7 +62,7 @@ ESPN standard bracket scoring:
 
 ## HTML Visualization — Data Pipeline
 
-The interactive bracket visualization (`march-madness-2026/index.html`) is a self-contained HTML file with all data embedded directly in JavaScript. No external dependencies or API calls. Deployed via GitHub Pages from the `march-madness-2026/` directory (which is its own git repo). Here's how data flows from source to visualization:
+The interactive visualization (`march-madness-2026/index.html`) is a self-contained HTML file with two tabs — **Bracket View** and **Game Overview** — with all data embedded directly in JavaScript. No external dependencies or API calls. Deployed via GitHub Pages from the `march-madness-2026/` directory (which is its own git repo). Both tabs are generated together by `update_game_overview.py`. Here's how data flows from source to visualization:
 
 **Source data files → HTML generation:**
 
@@ -74,17 +76,24 @@ The interactive bracket visualization (`march-madness-2026/index.html`) is a sel
 
 **How the HTML is built:**
 
-The HTML generation script reads all four data files above, then for each bracket:
-- Computes the percentage of winning scenarios where each team wins each game
-- Identifies "locked" requirements (teams that must win in 100% of paths) vs "flexible" outcomes
-- Embeds the aggregated stats as JavaScript objects directly in the HTML
-- Renders a bracket-style grid with game nodes showing both teams, their win percentages, and color coding (green = required, blue = flexible, gray = not needed)
-- Generates "Key Insights" cards summarizing must-win games and championship paths
+`update_game_overview.py` reads all four data files above, accepts optional game results as command-line arguments, then for each non-eliminated bracket:
+- Filters winning paths to only those consistent with locked-in results
+- Computes the percentage of remaining winning scenarios where each team wins each game
+- Identifies "locked" requirements (100% of paths) vs "flexible" outcomes
+- Determines S16 elimination risks (which game outcomes would reduce a bracket to 0 winning paths)
+- For the Game Overview tab, categorizes bracket owners by which team they prefer in each matchup
+- Embeds all aggregated stats as JavaScript objects directly in the HTML
 
-**To regenerate or update the visualization:**
-- Re-run the permutation engine (`permutation_engine.py`) if game results change
-- Rebuild the HTML using the updated JSON/CSV data files
-- Output goes to `march-madness-2026/index.html` — this is the only HTML file to update
+**To regenerate or update the visualization after a game result:**
+```
+python3 update_game_overview.py TEX                     # After one game
+python3 update_game_overview.py TEX IOWA ARIZ HOU       # After four games
+python3 update_game_overview.py                          # Reset to pre-results state
+```
+- Pass the WINNING team abbreviation for each completed S16 game (order doesn't matter)
+- Valid teams: DUKE, SJU, MSU, CONN, IOWA, NEB, ILL, HOU, ARIZ, ARK, TEX, PUR, MICH, ALA, TENN, ISU
+- Both tabs (Bracket View + Game Overview) are regenerated together in one run
+- Output goes to `march-madness-2026/index.html` — this is the only file to update
 - Push changes to the `march-madness-2026` GitHub repo to redeploy via GitHub Pages
 - The HTML file is fully self-contained — also works locally in any browser
 
