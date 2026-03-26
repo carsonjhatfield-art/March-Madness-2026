@@ -1,0 +1,35 @@
+{
+  "scrape_date": "2026-03-26",
+  "tournament_stage": "Sweet 16",
+  "s16_matchups": {
+    "slot_0": {"region": "East", "sub": "top", "team_a": "DUKE", "team_b": "SJU", "label": "Duke vs St John's"},
+    "slot_1": {"region": "East", "sub": "bottom", "team_a": "MSU", "team_b": "CONN", "label": "Michigan St vs UConn"},
+    "slot_2": {"region": "South", "sub": "top", "team_a": "IOWA", "team_b": "NEB", "label": "Iowa vs Nebraska"},
+    "slot_3": {"region": "South", "sub": "bottom", "team_a": "ILL", "team_b": "HOU", "label": "Illinois vs Houston"},
+    "slot_4": {"region": "West", "sub": "top", "team_a": "ARIZ", "team_b": "ARK", "label": "Arizona vs Arkansas"},
+    "slot_5": {"region": "West", "sub": "bottom", "team_a": "TEX", "team_b": "PUR", "label": "Texas vs Purdue"},
+    "slot_6": {"region": "Midwest", "sub": "top", "team_a": "MICH", "team_b": "ALA", "label": "Michigan vs Alabama"},
+    "slot_7": {"region": "Midwest", "sub": "bottom", "team_a": "TENN", "team_b": "ISU", "label": "Tennessee vs Iowa State"}
+  },
+  "e8_matchups": {
+    "slot_0": {"region": "East", "feeds_from": ["s16_slot_0", "s16_slot_1"]},
+    "slot_1": {"region": "South", "feeds_from": ["s16_slot_2", "s16_slot_3"]},
+    "slot_2": {"region": "West", "feeds_from": ["s16_slot_4", "s16_slot_5"]},
+    "slot_3": {"region": "Midwest", "feeds_from": ["s16_slot_6", "s16_slot_7"]}
+  },
+  "f4_matchups": {
+    "slot_0": {"label": "East vs South", "feeds_from": ["e8_slot_0", "e8_slot_1"]},
+    "slot_1": {"label": "West vs Midwest", "feeds_from": ["e8_slot_2", "e8_slot_3"]}
+  },
+  "championship": {
+    "feeds_from": ["f4_slot_0", "f4_slot_1"]
+  },
+  "scoring": {
+    "S16": 40,
+    "E8": 80,
+    "F4": 160,
+    "Championship": 320
+  },
+  "s16_teams": ["DUKE", "SJU", "MSU", "CONN", "IOWA", "NEB", "ILL", "HOU", "ARIZ", "ARK", "TEX", "PUR", "MICH", "ALA", "TENN", "ISU"],
+  "notes": "FLA, UCLA, GONZ, VAN, BYU, UVA, WIS are eliminated teams that some brackets picked but are no longer in the tournament. Picks for eliminated teams score 0."
+}
