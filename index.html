@@ -131,16 +131,34 @@
 
   .matchup-container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
-  .vs-header { display: flex; align-items: center; justify-content: center; gap: 24px; margin-bottom: 8px; padding: 24px; background: #111827; border-radius: 12px; border: 1px solid #1f2937; }
+  .vs-header { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 8px; padding: 20px 24px; background: #111827; border-radius: 12px; border: 1px solid #1f2937; }
   .vs-header.decided { border-color: #22c55e; }
-  .vs-team { text-align: center; flex: 1; max-width: 300px; }
-  .vs-team .vs-team-name { font-size: 36px; font-weight: 800; letter-spacing: 2px; }
-  .vs-team .team-region { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .vs-team { display: flex; align-items: center; gap: 14px; flex: 1; }
+  .vs-team.team-left { justify-content: flex-end; }
+  .vs-team.team-right { justify-content: flex-start; }
+  .vs-team-logo { width: 56px; height: 56px; border-radius: 8px; object-fit: contain; background: #1a1f36; padding: 4px; }
+  .vs-team-info { display: flex; flex-direction: column; }
+  .vs-team.team-left .vs-team-info { align-items: flex-end; }
+  .vs-team.team-right .vs-team-info { align-items: flex-start; }
+  .vs-team .vs-team-name { font-size: 32px; font-weight: 800; letter-spacing: 2px; line-height: 1; }
+  .vs-team .team-region { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
   .vs-team.team-left .vs-team-name { color: #60a5fa; }
   .vs-team.team-right .vs-team-name { color: #f97316; }
   .vs-team.winner .vs-team-name { color: #4ade80 !important; }
   .vs-team.loser .vs-team-name { color: #374151 !important; text-decoration: line-through; }
-  .vs-divider { font-size: 20px; font-weight: 800; color: #374151; padding: 0 8px; }
+  .vs-center { text-align: center; min-width: 120px; padding: 0 16px; flex-shrink: 0; }
+  .vs-score-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .vs-score { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 45px; }
+  .vs-score.left { text-align: right; color: #60a5fa; }
+  .vs-score.right { text-align: left; color: #f97316; }
+  .vs-score-sep { font-size: 28px; font-weight: 300; color: #374151; }
+  .vs-divider-text { font-size: 20px; font-weight: 800; color: #374151; }
+  .vs-clock { font-size: 13px; font-weight: 700; color: #e0e0e0; margin-top: 4px; }
+  .vs-period { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
+  .vs-center.live-final .vs-clock { color: #4ade80; }
+  .vs-center.live-halftime .vs-clock { color: #fbbf24; }
+  .vs-center.live-pregame .vs-clock { color: #6b7280; }
+  .live-updated { text-align: center; font-size: 10px; color: #4b5563; margin-top: 4px; }
 
   .decided-banner { text-align: center; padding: 10px; margin-bottom: 16px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; font-size: 13px; color: #86efac; font-weight: 600; display: none; }
   .decided-banner.visible { display: block; }
@@ -186,22 +204,6 @@
 
   .footer { text-align: center; padding: 16px; color: #374151; font-size: 11px; border-top: 1px solid #1f2937; margin-top: 24px; }
 
-  /* === LIVE SCORES === */
-  .live-scoreboard { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 16px 24px; background: #0d1225; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1f2937; }
-  .live-team-block { display: flex; align-items: center; gap: 10px; }
-  .live-team-block.left { flex-direction: row-reverse; }
-  .live-team-logo { width: 48px; height: 48px; border-radius: 6px; object-fit: contain; background: #1a1f36; padding: 4px; }
-  .live-team-score { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 50px; }
-  .live-team-block.left .live-team-score { text-align: right; color: #60a5fa; }
-  .live-team-block.right .live-team-score { text-align: left; color: #f97316; }
-  .live-center { text-align: center; min-width: 80px; }
-  .live-clock { font-size: 16px; font-weight: 700; color: #e0e0e0; }
-  .live-period { font-size: 11px; color: #9ca3af; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .live-status-final .live-clock { color: #4ade80; }
-  .live-status-halftime .live-clock { color: #fbbf24; }
-  .live-status-pregame .live-clock { color: #6b7280; }
-  .live-updated { text-align: center; font-size: 10px; color: #4b5563; margin-top: 6px; }
-  .live-scoreboard.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -501,31 +503,36 @@ function switchGame(slot) {
   rightOwners.sort((a, b) => (b.isElimIfAWins?1:0) - (a.isElimIfAWins?1:0) || b.b_pct - a.b_pct);
   const leftWon = isDone && winner === g.team_a;
   const rightWon = isDone && winner === g.team_b;
+  const logoA = ESPN_TEAM_IDS[g.team_a] ? 'https://a.espncdn.com/i/teamlogos/ncaa/500/' + ESPN_TEAM_IDS[g.team_a] + '.png' : '';
+  const logoB = ESPN_TEAM_IDS[g.team_b] ? 'https://a.espncdn.com/i/teamlogos/ncaa/500/' + ESPN_TEAM_IDS[g.team_b] + '.png' : '';
   container.innerHTML = `
-    <div class="live-scoreboard hidden" id="liveScore-${slot}">
-      <div class="live-team-block left">
-        <span class="live-team-score" id="liveScoreA-${slot}">—</span>
-        <img class="live-team-logo" id="liveLogoA-${slot}" src="" alt="">
+    <div class="vs-header${isDone ? ' decided' : ''}" id="vsHeader-${slot}">
+      <div class="vs-team team-left${leftWon ? ' winner' : ''}${rightWon ? ' loser' : ''}">
+        <div class="vs-team-info">
+          <div class="vs-team-name">${g.team_a}</div>
+          <div class="team-region">${g.region} Region</div>
+        </div>
+        <img class="vs-team-logo" src="${logoA}" alt="${g.team_a}">
       </div>
-      <div class="live-center" id="liveClock-${slot}">
-        <div class="live-clock">—</div>
-        <div class="live-period"></div>
+      <div class="vs-center" id="vsCenter-${slot}">
+        <div class="vs-score-row" id="vsScoreRow-${slot}" style="display:none;">
+          <span class="vs-score left" id="vsScoreA-${slot}">0</span>
+          <span class="vs-score-sep">–</span>
+          <span class="vs-score right" id="vsScoreB-${slot}">0</span>
+        </div>
+        <div class="vs-divider-text" id="vsDivider-${slot}">${isDone ? '✓' : 'VS'}</div>
+        <div class="vs-clock" id="vsClock-${slot}"></div>
+        <div class="vs-period" id="vsPeriod-${slot}"></div>
       </div>
-      <div class="live-team-block right">
-        <img class="live-team-logo" id="liveLogoB-${slot}" src="" alt="">
-        <span class="live-team-score" id="liveScoreB-${slot}">—</span>
+      <div class="vs-team team-right${rightWon ? ' winner' : ''}${leftWon ? ' loser' : ''}">
+        <img class="vs-team-logo" src="${logoB}" alt="${g.team_b}">
+        <div class="vs-team-info">
+          <div class="vs-team-name">${g.team_b}</div>
+          <div class="team-region">${g.region} Region</div>
+        </div>
       </div>
     </div>
     <div class="live-updated" id="liveUpdated-${slot}"></div>
-    <div class="vs-header${isDone ? ' decided' : ''}">
-      <div class="vs-team team-left${leftWon ? ' winner' : ''}${rightWon ? ' loser' : ''}">
-        <div class="vs-team-name">${g.team_a}</div><div class="team-region">${g.region} Region</div>
-      </div>
-      <div class="vs-divider">${isDone ? '✓' : 'VS'}</div>
-      <div class="vs-team team-right${rightWon ? ' winner' : ''}${leftWon ? ' loser' : ''}">
-        <div class="vs-team-name">${g.team_b}</div><div class="team-region">${g.region} Region</div>
-      </div>
-    </div>
     <div class="decided-banner${isDone ? ' visible' : ''}">${isDone ? `FINAL — ${winner} advances` : ''}</div>
     <div class="disclaimer">The % shown represents the proportion of each bracket's remaining winning scenarios that require this team to win this game — not a prediction of the game outcome.</div>
     <div class="columns">
@@ -570,13 +577,6 @@ const ESPN_TEAM_IDS = {
   ILL:356, HOU:248, ARIZ:12, ARK:8, TEX:251, PUR:2509,
   MICH:130, ALA:333, TENN:2633, ISU:66
 };
-const ESPN_ABBREV_MAP = {
-  'DUKE':'DUKE','ST':'SJU','STJOHNS':'SJU','MIST':'MSU','MICH ST':'MSU','MSU':'MSU',
-  'CONN':'CONN','UCONN':'CONN','IOWA':'IOWA','NEB':'NEB','ILL':'ILL',
-  'HOU':'HOU','ARIZ':'ARIZ','ARK':'ARK','TEX':'TEX','PUR':'PUR',
-  'MICH':'MICH','ALA':'ALA','TENN':'TENN','ISU':'ISU','IONA':'SJU'
-};
-// Map ESPN team IDs to our abbreviations
 const ESPN_ID_TO_ABBREV = {};
 for (const [abbr, id] of Object.entries(ESPN_TEAM_IDS)) ESPN_ID_TO_ABBREV[id] = abbr;
 
@@ -587,11 +587,6 @@ const ESPN_GAME_DATES = {
 
 let liveScoreCache = {};
 let liveInterval = null;
-
-function logoURL(teamAbbrev) {
-  const id = ESPN_TEAM_IDS[teamAbbrev];
-  return id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
-}
 
 function findESPNGame(events, slotTeamA, slotTeamB) {
   for (const ev of events) {
@@ -625,51 +620,54 @@ async function fetchESPNScores() {
 }
 
 function updateLiveScoreboard(slot, comp) {
-  const sb = document.getElementById(`liveScore-${slot}`);
-  if (!sb) return;
-  sb.classList.remove('hidden');
+  const center = document.getElementById(`vsCenter-${slot}`);
+  if (!center) return;
 
   const [teamA, teamB] = SLOT_TEAMS[slot];
-  // Set logos
-  document.getElementById(`liveLogoA-${slot}`).src = logoURL(teamA);
-  document.getElementById(`liveLogoB-${slot}`).src = logoURL(teamB);
 
   // Find scores by matching team IDs
-  let scoreA = '—', scoreB = '—';
+  let scoreA = '0', scoreB = '0';
   for (const c of comp.competitors) {
     const tid = parseInt(c.team.id);
     const abbr = ESPN_ID_TO_ABBREV[tid];
     if (abbr === teamA) scoreA = c.score || '0';
     else if (abbr === teamB) scoreB = c.score || '0';
   }
-  document.getElementById(`liveScoreA-${slot}`).textContent = scoreA;
-  document.getElementById(`liveScoreB-${slot}`).textContent = scoreB;
 
-  // Clock & status
-  const clockEl = document.getElementById(`liveClock-${slot}`);
+  const scoreRow = document.getElementById(`vsScoreRow-${slot}`);
+  const divider = document.getElementById(`vsDivider-${slot}`);
+  const clockEl = document.getElementById(`vsClock-${slot}`);
+  const periodEl = document.getElementById(`vsPeriod-${slot}`);
   const status = comp.status;
   const statusName = status.type.name;
-  const clockDiv = clockEl.querySelector('.live-clock');
-  const periodDiv = clockEl.querySelector('.live-period');
 
-  clockEl.className = 'live-center';
+  // Show scores, hide VS text
+  scoreRow.style.display = 'flex';
+  divider.style.display = 'none';
+  document.getElementById(`vsScoreA-${slot}`).textContent = scoreA;
+  document.getElementById(`vsScoreB-${slot}`).textContent = scoreB;
+
+  // Reset status classes
+  center.className = 'vs-center';
   if (statusName === 'STATUS_FINAL') {
-    clockDiv.textContent = 'FINAL';
-    periodDiv.textContent = '';
-    clockEl.classList.add('live-status-final');
+    clockEl.textContent = 'FINAL';
+    periodEl.textContent = '';
+    center.classList.add('live-final');
   } else if (statusName === 'STATUS_HALFTIME') {
-    clockDiv.textContent = 'HALFTIME';
-    periodDiv.textContent = '';
-    clockEl.classList.add('live-status-halftime');
+    clockEl.textContent = 'HALFTIME';
+    periodEl.textContent = '';
+    center.classList.add('live-halftime');
   } else if (statusName === 'STATUS_IN_PROGRESS') {
-    clockDiv.textContent = status.displayClock || '';
+    clockEl.textContent = status.displayClock || '';
     const period = status.period || 0;
-    periodDiv.textContent = period === 1 ? '1st Half' : period === 2 ? '2nd Half' : period > 2 ? 'OT' + (period > 3 ? ' ' + (period - 2) : '') : '';
+    periodEl.textContent = period === 1 ? '1st Half' : period === 2 ? '2nd Half' : period > 2 ? 'OT' + (period > 3 ? ' ' + (period - 2) : '') : '';
   } else {
-    // Scheduled / Pre-game
-    clockDiv.textContent = status.type.shortDetail || 'Scheduled';
-    periodDiv.textContent = '';
-    clockEl.classList.add('live-status-pregame');
+    // Scheduled / Pre-game — hide scores, show VS
+    scoreRow.style.display = 'none';
+    divider.style.display = 'block';
+    clockEl.textContent = status.type.shortDetail || '';
+    periodEl.textContent = '';
+    center.classList.add('live-pregame');
   }
 
   // Updated timestamp
