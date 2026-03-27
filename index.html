@@ -185,6 +185,23 @@
   .game-legend { display: flex; gap: 20px; padding: 16px 32px; flex-wrap: wrap; align-items: center; max-width: 1100px; margin: 0 auto; }
 
   .footer { text-align: center; padding: 16px; color: #374151; font-size: 11px; border-top: 1px solid #1f2937; margin-top: 24px; }
+
+  /* === LIVE SCORES === */
+  .live-scoreboard { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 16px 24px; background: #0d1225; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1f2937; }
+  .live-team-block { display: flex; align-items: center; gap: 10px; }
+  .live-team-block.left { flex-direction: row-reverse; }
+  .live-team-logo { width: 48px; height: 48px; border-radius: 6px; object-fit: contain; background: #1a1f36; padding: 4px; }
+  .live-team-score { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 50px; }
+  .live-team-block.left .live-team-score { text-align: right; color: #60a5fa; }
+  .live-team-block.right .live-team-score { text-align: left; color: #f97316; }
+  .live-center { text-align: center; min-width: 80px; }
+  .live-clock { font-size: 16px; font-weight: 700; color: #e0e0e0; }
+  .live-period { font-size: 11px; color: #9ca3af; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .live-status-final .live-clock { color: #4ade80; }
+  .live-status-halftime .live-clock { color: #fbbf24; }
+  .live-status-pregame .live-clock { color: #6b7280; }
+  .live-updated { text-align: center; font-size: 10px; color: #4b5563; margin-top: 6px; }
+  .live-scoreboard.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -485,6 +502,21 @@ function switchGame(slot) {
   const leftWon = isDone && winner === g.team_a;
   const rightWon = isDone && winner === g.team_b;
   container.innerHTML = `
+    <div class="live-scoreboard hidden" id="liveScore-${slot}">
+      <div class="live-team-block left">
+        <span class="live-team-score" id="liveScoreA-${slot}">—</span>
+        <img class="live-team-logo" id="liveLogoA-${slot}" src="" alt="">
+      </div>
+      <div class="live-center" id="liveClock-${slot}">
+        <div class="live-clock">—</div>
+        <div class="live-period"></div>
+      </div>
+      <div class="live-team-block right">
+        <img class="live-team-logo" id="liveLogoB-${slot}" src="" alt="">
+        <span class="live-team-score" id="liveScoreB-${slot}">—</span>
+      </div>
+    </div>
+    <div class="live-updated" id="liveUpdated-${slot}"></div>
     <div class="vs-header${isDone ? ' decided' : ''}">
       <div class="vs-team team-left${leftWon ? ' winner' : ''}${rightWon ? ' loser' : ''}">
         <div class="vs-team-name">${g.team_a}</div><div class="team-region">${g.region} Region</div>
@@ -529,9 +561,246 @@ function gameOwnerRowHTML(o, side, g) {
   return `<div class="owner-row ${rowCls}${extra}"><div class="pct-bg" style="width:${pctVal}%;"></div><div class="owner-info"><div class="owner-name">${o.name}${badge}</div><div class="owner-detail"><span class="champ">Champ: ${o.champion}</span></div></div><div class="owner-pct ${pctCls}">${pctVal.toFixed(1)}%</div></div>`;
 }
 
+/* === LOOKUP TABLE === */
+const LOOKUP = {"0":{"Mick is the Pick":34.38,"Charlie Kirk's Bracket":46.88,"Carson Hatfield's Picks 1":18.75},"1":{"Mick is the Pick":43.75,"Charlie Kirk's Bracket":37.5,"Carson Hatfield's Picks 1":18.75},"2":{"AndrewMCorral's Picks 2":10.94,"Mick is the Pick":28.91,"Sampsonites":1.56,"Charlie Kirk's Bracket":17.97,"catmasqueaks":28.12,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":7.81},"3":{"AndrewMCorral's Picks 2":7.81,"Mick is the Pick":42.19,"Sampsonites":1.56,"Charlie Kirk's Bracket":7.81,"catmasqueaks":28.12,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":7.81},"4":{"Mick is the Pick":34.38,"Charlie Kirk's Bracket":46.88,"Carson Hatfield's Picks 1":18.75},"5":{"Mick is the Pick":43.75,"Charlie Kirk's Bracket":37.5,"Carson Hatfield's Picks 1":18.75},"6":{"AndrewMCorral's Picks 2":10.94,"Mick is the Pick":28.91,"Sampsonites":1.56,"Charlie Kirk's Bracket":17.97,"catmasqueaks":28.12,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":7.81},"7":{"AndrewMCorral's Picks 2":7.81,"Mick is the Pick":42.19,"Sampsonites":1.56,"Charlie Kirk's Bracket":7.81,"catmasqueaks":28.12,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":7.81},"8":{"Sampsonites":9.38,"Charlie Kirk's Bracket":48.44,"Mobleys to the moon's Picks 1":21.09,"catmasqueaks":0.78,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":14.06},"9":{"Sampsonites":15.62,"Charlie Kirk's Bracket":46.88,"Mobleys to the moon's Picks 1":20.31,"catmasqueaks":1.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":9.38},"10":{"AndrewMCorral's Picks 2":14.06,"Sampsonites":14.06,"Charlie Kirk's Bracket":17.19,"catmasqueaks":31.25,"gabem222's Picks 1":7.81,"deppeb's Picks 1":9.38,"Nick Barbarino's Picks 3":4.69,"Niclad":1.56},"11":{"AndrewMCorral's Picks 2":14.06,"Sampsonites":20.31,"Charlie Kirk's Bracket":14.06,"catmasqueaks":37.5,"gabem222's Picks 1":9.38,"deppeb's Picks 1":4.69},"12":{"Sampsonites":9.38,"Charlie Kirk's Bracket":48.44,"Mobleys to the moon's Picks 1":21.09,"catmasqueaks":0.78,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":14.06},"13":{"Sampsonites":15.62,"Charlie Kirk's Bracket":46.88,"Mobleys to the moon's Picks 1":20.31,"catmasqueaks":1.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":9.38},"14":{"AndrewMCorral's Picks 2":14.06,"Sampsonites":14.06,"Charlie Kirk's Bracket":17.19,"catmasqueaks":31.25,"gabem222's Picks 1":7.81,"deppeb's Picks 1":9.38,"Nick Barbarino's Picks 3":4.69,"Niclad":1.56},"15":{"AndrewMCorral's Picks 2":14.06,"Sampsonites":20.31,"Charlie Kirk's Bracket":14.06,"catmasqueaks":37.5,"gabem222's Picks 1":9.38,"deppeb's Picks 1":4.69},"16":{"Mick is the Pick":37.5,"Sampsonites":12.5,"Charlie Kirk's Bracket":50.0},"17":{"Mick is the Pick":50.0,"Sampsonites":25.0,"Charlie Kirk's Bracket":25.0},"18":{"AndrewMCorral's Picks 2":7.29,"Mick is the Pick":27.6,"Sampsonites":21.88,"Charlie Kirk's Bracket":21.35,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"19":{"Mick is the Pick":31.25,"Sampsonites":46.88,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"20":{"Mick is the Pick":37.5,"Sampsonites":12.5,"Charlie Kirk's Bracket":50.0},"21":{"Mick is the Pick":50.0,"Sampsonites":25.0,"Charlie Kirk's Bracket":25.0},"22":{"AndrewMCorral's Picks 2":7.29,"Mick is the Pick":27.6,"Sampsonites":21.88,"Charlie Kirk's Bracket":21.35,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"23":{"Mick is the Pick":31.25,"Sampsonites":46.88,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"24":{"Sampsonites":46.88,"Charlie Kirk's Bracket":43.75,"Mobleys to the moon's Picks 1":9.38},"25":{"Sampsonites":68.75,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":6.25},"26":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":46.88,"Charlie Kirk's Bracket":17.19,"catmasqueaks":18.75,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":3.12},"27":{"Sampsonites":78.12,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"28":{"Sampsonites":46.88,"Charlie Kirk's Bracket":43.75,"Mobleys to the moon's Picks 1":9.38},"29":{"Sampsonites":68.75,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":6.25},"30":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":46.88,"Charlie Kirk's Bracket":17.19,"catmasqueaks":18.75,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":3.12},"31":{"Sampsonites":78.12,"catmasqueaks":18.75,"gabem222's Picks 1":3.12},"32":{"Mick is the Pick":28.12,"Charlie Kirk's Bracket":34.38,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":18.75},"33":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":18.75},"34":{"AndrewMCorral's Picks 2":9.38,"Mick is the Pick":24.22,"Sampsonites":1.56,"Charlie Kirk's Bracket":15.62,"Eleff18's Picks 1":17.97,"eloeb10's Picks 1":12.5,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"35":{"AndrewMCorral's Picks 2":7.81,"Mick is the Pick":30.47,"Sampsonites":1.56,"Charlie Kirk's Bracket":10.94,"Eleff18's Picks 1":17.97,"eloeb10's Picks 1":12.5,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"36":{"Mick is the Pick":28.12,"Charlie Kirk's Bracket":34.38,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":18.75},"37":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":18.75},"38":{"AndrewMCorral's Picks 2":9.38,"Mick is the Pick":24.22,"Sampsonites":1.56,"Charlie Kirk's Bracket":15.62,"Eleff18's Picks 1":17.97,"eloeb10's Picks 1":12.5,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"39":{"AndrewMCorral's Picks 2":7.81,"Mick is the Pick":30.47,"Sampsonites":1.56,"Charlie Kirk's Bracket":10.94,"Eleff18's Picks 1":17.97,"eloeb10's Picks 1":12.5,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"40":{"Sampsonites":6.25,"Charlie Kirk's Bracket":32.81,"Mobleys to the moon's Picks 1":17.19,"eloeb10's Picks 1":26.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":10.94},"41":{"Sampsonites":9.38,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":17.19,"eloeb10's Picks 1":26.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":9.38},"42":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":14.06,"Charlie Kirk's Bracket":14.06,"Eleff18's Picks 1":10.94,"eloeb10's Picks 1":15.62,"catmasqueaks":14.06,"gabem222's Picks 1":6.25,"deppeb's Picks 1":9.38,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"43":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":17.19,"Charlie Kirk's Bracket":12.5,"Eleff18's Picks 1":10.94,"eloeb10's Picks 1":15.62,"catmasqueaks":14.06,"gabem222's Picks 1":6.25,"deppeb's Picks 1":7.81,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"44":{"Sampsonites":6.25,"Charlie Kirk's Bracket":32.81,"Mobleys to the moon's Picks 1":17.19,"eloeb10's Picks 1":26.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":10.94},"45":{"Sampsonites":9.38,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":17.19,"eloeb10's Picks 1":26.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":9.38},"46":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":14.06,"Charlie Kirk's Bracket":14.06,"Eleff18's Picks 1":10.94,"eloeb10's Picks 1":15.62,"catmasqueaks":14.06,"gabem222's Picks 1":6.25,"deppeb's Picks 1":9.38,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"47":{"AndrewMCorral's Picks 2":10.94,"Sampsonites":17.19,"Charlie Kirk's Bracket":12.5,"Eleff18's Picks 1":10.94,"eloeb10's Picks 1":15.62,"catmasqueaks":14.06,"gabem222's Picks 1":6.25,"deppeb's Picks 1":7.81,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"48":{"Mick is the Pick":26.56,"Sampsonites":18.75,"Charlie Kirk's Bracket":35.94,"eloeb10's Picks 1":18.75},"49":{"Mick is the Pick":28.12,"Sampsonites":37.5,"Charlie Kirk's Bracket":15.62,"eloeb10's Picks 1":18.75},"50":{"AndrewMCorral's Picks 2":5.47,"Mick is the Pick":25.0,"Sampsonites":20.31,"Charlie Kirk's Bracket":16.41,"Eleff18's Picks 1":12.5,"eloeb10's Picks 1":12.5,"catmasqueaks":4.69,"gabem222's Picks 1":3.12},"51":{"Mick is the Pick":28.12,"Sampsonites":39.06,"Eleff18's Picks 1":12.5,"eloeb10's Picks 1":12.5,"catmasqueaks":4.69,"gabem222's Picks 1":3.12},"52":{"Mick is the Pick":26.56,"Sampsonites":18.75,"Charlie Kirk's Bracket":35.94,"eloeb10's Picks 1":18.75},"53":{"Mick is the Pick":28.12,"Sampsonites":37.5,"Charlie Kirk's Bracket":15.62,"eloeb10's Picks 1":18.75},"54":{"AndrewMCorral's Picks 2":5.47,"Mick is the Pick":25.0,"Sampsonites":20.31,"Charlie Kirk's Bracket":16.41,"Eleff18's Picks 1":12.5,"eloeb10's Picks 1":12.5,"catmasqueaks":4.69,"gabem222's Picks 1":3.12},"55":{"Mick is the Pick":28.12,"Sampsonites":39.06,"Eleff18's Picks 1":12.5,"eloeb10's Picks 1":12.5,"catmasqueaks":4.69,"gabem222's Picks 1":3.12},"56":{"Sampsonites":39.06,"Charlie Kirk's Bracket":29.69,"Mobleys to the moon's Picks 1":4.69,"eloeb10's Picks 1":26.56},"57":{"Sampsonites":59.38,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":1.56,"eloeb10's Picks 1":26.56},"58":{"AndrewMCorral's Picks 2":7.81,"Sampsonites":43.75,"Charlie Kirk's Bracket":12.5,"Eleff18's Picks 1":6.25,"eloeb10's Picks 1":15.62,"catmasqueaks":9.38,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":1.56},"59":{"Sampsonites":68.75,"Eleff18's Picks 1":6.25,"eloeb10's Picks 1":12.5,"catmasqueaks":9.38,"gabem222's Picks 1":3.12},"60":{"Sampsonites":39.06,"Charlie Kirk's Bracket":29.69,"Mobleys to the moon's Picks 1":4.69,"eloeb10's Picks 1":26.56},"61":{"Sampsonites":59.38,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":1.56,"eloeb10's Picks 1":26.56},"62":{"AndrewMCorral's Picks 2":7.81,"Sampsonites":43.75,"Charlie Kirk's Bracket":12.5,"Eleff18's Picks 1":6.25,"eloeb10's Picks 1":15.62,"catmasqueaks":9.38,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":1.56},"63":{"Sampsonites":68.75,"Eleff18's Picks 1":6.25,"eloeb10's Picks 1":12.5,"catmasqueaks":9.38,"gabem222's Picks 1":3.12},"64":{"AndrewMCorral's Picks 2":61.72,"Mick is the Pick":26.56,"Charlie Kirk's Bracket":11.72},"65":{"AndrewMCorral's Picks 2":59.38,"Mick is the Pick":31.25,"Charlie Kirk's Bracket":9.38},"66":{"AndrewMCorral's Picks 2":47.66,"Mick is the Pick":19.53,"Eleff18's Picks 1":32.81},"67":{"AndrewMCorral's Picks 2":45.31,"Mick is the Pick":21.88,"Eleff18's Picks 1":32.81},"68":{"AndrewMCorral's Picks 2":61.72,"Mick is the Pick":26.56,"Charlie Kirk's Bracket":11.72},"69":{"AndrewMCorral's Picks 2":59.38,"Mick is the Pick":31.25,"Charlie Kirk's Bracket":9.38},"70":{"AndrewMCorral's Picks 2":47.66,"Mick is the Pick":19.53,"Eleff18's Picks 1":32.81},"71":{"AndrewMCorral's Picks 2":45.31,"Mick is the Pick":21.88,"Eleff18's Picks 1":32.81},"72":{"AndrewMCorral's Picks 2":78.12,"Sampsonites":3.12,"Charlie Kirk's Bracket":9.38,"deppeb's Picks 1":9.38},"73":{"AndrewMCorral's Picks 2":78.12,"Sampsonites":6.25,"Charlie Kirk's Bracket":9.38,"deppeb's Picks 1":6.25},"74":{"AndrewMCorral's Picks 2":60.94,"Sampsonites":7.81,"Eleff18's Picks 1":18.75,"catmasqueaks":12.5},"75":{"AndrewMCorral's Picks 2":57.81,"Sampsonites":10.94,"Eleff18's Picks 1":18.75,"catmasqueaks":12.5},"76":{"AndrewMCorral's Picks 2":78.12,"Sampsonites":3.12,"Charlie Kirk's Bracket":9.38,"deppeb's Picks 1":9.38},"77":{"AndrewMCorral's Picks 2":78.12,"Sampsonites":6.25,"Charlie Kirk's Bracket":9.38,"deppeb's Picks 1":6.25},"78":{"AndrewMCorral's Picks 2":60.94,"Sampsonites":7.81,"Eleff18's Picks 1":18.75,"catmasqueaks":12.5},"79":{"AndrewMCorral's Picks 2":57.81,"Sampsonites":10.94,"Eleff18's Picks 1":18.75,"catmasqueaks":12.5},"80":{"AndrewMCorral's Picks 2":50.0,"Mick is the Pick":31.25,"Sampsonites":6.25,"Charlie Kirk's Bracket":12.5},"81":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":37.5,"Sampsonites":12.5,"Charlie Kirk's Bracket":6.25},"82":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":25.0,"Sampsonites":6.25,"Eleff18's Picks 1":28.12},"83":{"AndrewMCorral's Picks 2":29.69,"Mick is the Pick":26.56,"Sampsonites":15.62,"Eleff18's Picks 1":28.12},"84":{"AndrewMCorral's Picks 2":50.0,"Mick is the Pick":31.25,"Sampsonites":6.25,"Charlie Kirk's Bracket":12.5},"85":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":37.5,"Sampsonites":12.5,"Charlie Kirk's Bracket":6.25},"86":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":25.0,"Sampsonites":6.25,"Eleff18's Picks 1":28.12},"87":{"AndrewMCorral's Picks 2":29.69,"Mick is the Pick":26.56,"Sampsonites":15.62,"Eleff18's Picks 1":28.12},"88":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":31.25,"Charlie Kirk's Bracket":9.38},"89":{"AndrewMCorral's Picks 2":50.0,"Sampsonites":43.75,"Charlie Kirk's Bracket":6.25},"90":{"AndrewMCorral's Picks 2":43.75,"Sampsonites":28.12,"Eleff18's Picks 1":15.62,"catmasqueaks":12.5},"91":{"AndrewMCorral's Picks 2":31.25,"Sampsonites":40.62,"Eleff18's Picks 1":15.62,"catmasqueaks":12.5},"92":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":31.25,"Charlie Kirk's Bracket":9.38},"93":{"AndrewMCorral's Picks 2":50.0,"Sampsonites":43.75,"Charlie Kirk's Bracket":6.25},"94":{"AndrewMCorral's Picks 2":43.75,"Sampsonites":28.12,"Eleff18's Picks 1":15.62,"catmasqueaks":12.5},"95":{"AndrewMCorral's Picks 2":31.25,"Sampsonites":40.62,"Eleff18's Picks 1":15.62,"catmasqueaks":12.5},"96":{"AndrewMCorral's Picks 2":51.04,"Mick is the Pick":21.35,"Charlie Kirk's Bracket":8.85,"eloeb10's Picks 1":18.75},"97":{"AndrewMCorral's Picks 2":50.52,"Mick is the Pick":22.4,"Charlie Kirk's Bracket":8.33,"eloeb10's Picks 1":18.75},"98":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":18.75,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"99":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":18.75,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"100":{"AndrewMCorral's Picks 2":51.04,"Mick is the Pick":21.35,"Charlie Kirk's Bracket":8.85,"eloeb10's Picks 1":18.75},"101":{"AndrewMCorral's Picks 2":50.52,"Mick is the Pick":22.4,"Charlie Kirk's Bracket":8.33,"eloeb10's Picks 1":18.75},"102":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":18.75,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"103":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":18.75,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"104":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":1.56,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0,"deppeb's Picks 1":7.81},"105":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":3.12,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0,"deppeb's Picks 1":6.25},"106":{"AndrewMCorral's Picks 2":54.69,"Sampsonites":7.81,"Eleff18's Picks 1":29.69,"eloeb10's Picks 1":7.81},"107":{"AndrewMCorral's Picks 2":53.12,"Sampsonites":9.38,"Eleff18's Picks 1":29.69,"eloeb10's Picks 1":7.81},"108":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":1.56,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0,"deppeb's Picks 1":7.81},"109":{"AndrewMCorral's Picks 2":59.38,"Sampsonites":3.12,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0,"deppeb's Picks 1":6.25},"110":{"AndrewMCorral's Picks 2":54.69,"Sampsonites":7.81,"Eleff18's Picks 1":29.69,"eloeb10's Picks 1":7.81},"111":{"AndrewMCorral's Picks 2":53.12,"Sampsonites":9.38,"Eleff18's Picks 1":29.69,"eloeb10's Picks 1":7.81},"112":{"AndrewMCorral's Picks 2":37.24,"Mick is the Pick":25.52,"Sampsonites":9.38,"Charlie Kirk's Bracket":9.11,"eloeb10's Picks 1":18.75},"113":{"AndrewMCorral's Picks 2":32.29,"Mick is the Pick":26.04,"Sampsonites":18.75,"Charlie Kirk's Bracket":4.17,"eloeb10's Picks 1":18.75},"114":{"AndrewMCorral's Picks 2":35.94,"Mick is the Pick":25.0,"Sampsonites":6.25,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"115":{"AndrewMCorral's Picks 2":26.56,"Mick is the Pick":25.0,"Sampsonites":15.62,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"116":{"AndrewMCorral's Picks 2":37.24,"Mick is the Pick":25.52,"Sampsonites":9.38,"Charlie Kirk's Bracket":9.11,"eloeb10's Picks 1":18.75},"117":{"AndrewMCorral's Picks 2":32.29,"Mick is the Pick":26.04,"Sampsonites":18.75,"Charlie Kirk's Bracket":4.17,"eloeb10's Picks 1":18.75},"118":{"AndrewMCorral's Picks 2":35.94,"Mick is the Pick":25.0,"Sampsonites":6.25,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"119":{"AndrewMCorral's Picks 2":26.56,"Mick is the Pick":25.0,"Sampsonites":15.62,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"120":{"AndrewMCorral's Picks 2":42.19,"Sampsonites":26.56,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0},"121":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":37.5,"Charlie Kirk's Bracket":3.12,"eloeb10's Picks 1":25.0},"122":{"AndrewMCorral's Picks 2":39.06,"Sampsonites":26.56,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":7.81},"123":{"AndrewMCorral's Picks 2":26.56,"Sampsonites":40.62,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"124":{"AndrewMCorral's Picks 2":42.19,"Sampsonites":26.56,"Charlie Kirk's Bracket":6.25,"eloeb10's Picks 1":25.0},"125":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":37.5,"Charlie Kirk's Bracket":3.12,"eloeb10's Picks 1":25.0},"126":{"AndrewMCorral's Picks 2":39.06,"Sampsonites":26.56,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":7.81},"127":{"AndrewMCorral's Picks 2":26.56,"Sampsonites":40.62,"Eleff18's Picks 1":26.56,"eloeb10's Picks 1":6.25},"128":{"Mick is the Pick":26.56,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":40.62,"Carson Hatfield's Picks 1":9.38},"129":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":18.75,"Mobleys to the moon's Picks 1":40.62,"Carson Hatfield's Picks 1":9.38},"130":{"Mick is the Pick":27.34,"Charlie Kirk's Bracket":13.28,"Mobleys to the moon's Picks 1":18.75,"Eleff18's Picks 1":20.31,"catmasqueaks":9.38,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"131":{"Mick is the Pick":39.06,"Charlie Kirk's Bracket":6.25,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":20.31,"catmasqueaks":9.38,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"132":{"Mick is the Pick":26.56,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":40.62,"Carson Hatfield's Picks 1":9.38},"133":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":18.75,"Mobleys to the moon's Picks 1":40.62,"Carson Hatfield's Picks 1":9.38},"134":{"Mick is the Pick":27.34,"Charlie Kirk's Bracket":13.28,"Mobleys to the moon's Picks 1":18.75,"Eleff18's Picks 1":20.31,"catmasqueaks":9.38,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"135":{"Mick is the Pick":39.06,"Charlie Kirk's Bracket":6.25,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":20.31,"catmasqueaks":9.38,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"136":{"Sampsonites":3.12,"Charlie Kirk's Bracket":32.81,"Mobleys to the moon's Picks 1":52.34,"catmasqueaks":0.78,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":4.69},"137":{"Sampsonites":6.25,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":51.56,"catmasqueaks":1.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"138":{"Sampsonites":9.9,"Charlie Kirk's Bracket":17.19,"Mobleys to the moon's Picks 1":26.3,"Eleff18's Picks 1":12.5,"catmasqueaks":18.49,"gabem222's Picks 1":6.25,"deppeb's Picks 1":3.12,"Nick Barbarino's Picks 3":4.69,"Niclad":1.56},"139":{"Sampsonites":14.58,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":24.74,"Eleff18's Picks 1":12.5,"catmasqueaks":24.74,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56},"140":{"Sampsonites":3.12,"Charlie Kirk's Bracket":32.81,"Mobleys to the moon's Picks 1":52.34,"catmasqueaks":0.78,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":4.69},"141":{"Sampsonites":6.25,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":51.56,"catmasqueaks":1.56,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"142":{"Sampsonites":9.9,"Charlie Kirk's Bracket":17.19,"Mobleys to the moon's Picks 1":26.3,"Eleff18's Picks 1":12.5,"catmasqueaks":18.49,"gabem222's Picks 1":6.25,"deppeb's Picks 1":3.12,"Nick Barbarino's Picks 3":4.69,"Niclad":1.56},"143":{"Sampsonites":14.58,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":24.74,"Eleff18's Picks 1":12.5,"catmasqueaks":24.74,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56},"144":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":37.5},"145":{"Mick is the Pick":37.5,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":37.5},"146":{"Mick is the Pick":28.12,"Sampsonites":11.72,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":18.75,"Eleff18's Picks 1":15.62,"catmasqueaks":7.03,"gabem222's Picks 1":3.12},"147":{"Mick is the Pick":40.62,"Sampsonites":21.09,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"catmasqueaks":7.03,"gabem222's Picks 1":3.12},"148":{"Mick is the Pick":31.25,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":37.5},"149":{"Mick is the Pick":37.5,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":37.5},"150":{"Mick is the Pick":28.12,"Sampsonites":11.72,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":18.75,"Eleff18's Picks 1":15.62,"catmasqueaks":7.03,"gabem222's Picks 1":3.12},"151":{"Mick is the Pick":40.62,"Sampsonites":21.09,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"catmasqueaks":7.03,"gabem222's Picks 1":3.12},"152":{"Sampsonites":21.88,"Charlie Kirk's Bracket":34.38,"Mobleys to the moon's Picks 1":43.75},"153":{"Sampsonites":28.12,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":40.62},"154":{"Sampsonites":35.16,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":20.31,"Eleff18's Picks 1":9.38,"catmasqueaks":13.28,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":3.12},"155":{"Sampsonites":53.12,"Charlie Kirk's Bracket":6.25,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":9.38,"catmasqueaks":14.06,"gabem222's Picks 1":3.12},"156":{"Sampsonites":21.88,"Charlie Kirk's Bracket":34.38,"Mobleys to the moon's Picks 1":43.75},"157":{"Sampsonites":28.12,"Charlie Kirk's Bracket":31.25,"Mobleys to the moon's Picks 1":40.62},"158":{"Sampsonites":35.16,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":20.31,"Eleff18's Picks 1":9.38,"catmasqueaks":13.28,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":3.12},"159":{"Sampsonites":53.12,"Charlie Kirk's Bracket":6.25,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":9.38,"catmasqueaks":14.06,"gabem222's Picks 1":3.12},"160":{"Mick is the Pick":23.44,"Charlie Kirk's Bracket":17.19,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":9.38},"161":{"Mick is the Pick":25.0,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":9.38},"162":{"Mick is the Pick":21.88,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":15.62,"Eleff18's Picks 1":20.31,"eloeb10's Picks 1":10.94,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"163":{"Mick is the Pick":25.0,"Charlie Kirk's Bracket":9.38,"Mobleys to the moon's Picks 1":15.62,"Eleff18's Picks 1":20.31,"eloeb10's Picks 1":10.94,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"164":{"Mick is the Pick":23.44,"Charlie Kirk's Bracket":17.19,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":9.38},"165":{"Mick is the Pick":25.0,"Charlie Kirk's Bracket":15.62,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75,"Carson Hatfield's Picks 1":9.38},"166":{"Mick is the Pick":21.88,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":15.62,"Eleff18's Picks 1":20.31,"eloeb10's Picks 1":10.94,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"167":{"Mick is the Pick":25.0,"Charlie Kirk's Bracket":9.38,"Mobleys to the moon's Picks 1":15.62,"Eleff18's Picks 1":20.31,"eloeb10's Picks 1":10.94,"catmasqueaks":7.81,"Carson Hatfield's Picks 1":4.69,"gabem222's Picks 1":6.25},"168":{"Sampsonites":1.56,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":40.62,"eloeb10's Picks 1":25.0,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"169":{"Sampsonites":3.12,"Charlie Kirk's Bracket":21.88,"Mobleys to the moon's Picks 1":40.62,"eloeb10's Picks 1":25.0,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"170":{"Sampsonites":10.16,"Charlie Kirk's Bracket":14.06,"Mobleys to the moon's Picks 1":21.09,"Eleff18's Picks 1":18.75,"eloeb10's Picks 1":14.06,"catmasqueaks":9.38,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"171":{"Sampsonites":12.5,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":20.31,"Eleff18's Picks 1":18.75,"eloeb10's Picks 1":14.06,"catmasqueaks":9.38,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"172":{"Sampsonites":1.56,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":40.62,"eloeb10's Picks 1":25.0,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"173":{"Sampsonites":3.12,"Charlie Kirk's Bracket":21.88,"Mobleys to the moon's Picks 1":40.62,"eloeb10's Picks 1":25.0,"Carson Hatfield's Picks 1":6.25,"deppeb's Picks 1":3.12},"174":{"Sampsonites":10.16,"Charlie Kirk's Bracket":14.06,"Mobleys to the moon's Picks 1":21.09,"Eleff18's Picks 1":18.75,"eloeb10's Picks 1":14.06,"catmasqueaks":9.38,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"175":{"Sampsonites":12.5,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":20.31,"Eleff18's Picks 1":18.75,"eloeb10's Picks 1":14.06,"catmasqueaks":9.38,"gabem222's Picks 1":6.25,"deppeb's Picks 1":1.56,"Nick Barbarino's Picks 3":3.12,"Niclad":1.56},"176":{"Mick is the Pick":27.34,"Charlie Kirk's Bracket":25.78,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"177":{"Mick is the Pick":29.69,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"178":{"Mick is the Pick":25.0,"Sampsonites":10.94,"Charlie Kirk's Bracket":14.06,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"179":{"Mick is the Pick":26.56,"Sampsonites":25.0,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"180":{"Mick is the Pick":27.34,"Charlie Kirk's Bracket":25.78,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"181":{"Mick is the Pick":29.69,"Charlie Kirk's Bracket":23.44,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"182":{"Mick is the Pick":25.0,"Sampsonites":10.94,"Charlie Kirk's Bracket":14.06,"Mobleys to the moon's Picks 1":14.06,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"183":{"Mick is the Pick":26.56,"Sampsonites":25.0,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"184":{"Sampsonites":17.97,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":32.03,"eloeb10's Picks 1":25.0},"185":{"Sampsonites":23.44,"Charlie Kirk's Bracket":21.88,"Mobleys to the moon's Picks 1":29.69,"eloeb10's Picks 1":25.0},"186":{"Sampsonites":32.03,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":14.84,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":14.06,"catmasqueaks":6.25,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":1.56},"187":{"Sampsonites":51.56,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"188":{"Sampsonites":17.97,"Charlie Kirk's Bracket":25.0,"Mobleys to the moon's Picks 1":32.03,"eloeb10's Picks 1":25.0},"189":{"Sampsonites":23.44,"Charlie Kirk's Bracket":21.88,"Mobleys to the moon's Picks 1":29.69,"eloeb10's Picks 1":25.0},"190":{"Sampsonites":32.03,"Charlie Kirk's Bracket":12.5,"Mobleys to the moon's Picks 1":14.84,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":14.06,"catmasqueaks":6.25,"gabem222's Picks 1":3.12,"Nick Barbarino's Picks 3":1.56},"191":{"Sampsonites":51.56,"Charlie Kirk's Bracket":3.12,"Mobleys to the moon's Picks 1":9.38,"Eleff18's Picks 1":15.62,"eloeb10's Picks 1":10.94,"catmasqueaks":6.25,"gabem222's Picks 1":3.12},"192":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":40.62},"193":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":40.62},"194":{"AndrewMCorral's Picks 2":47.66,"Mick is the Pick":19.53,"Eleff18's Picks 1":32.81},"195":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":18.75,"Eleff18's Picks 1":53.12},"196":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":40.62},"197":{"AndrewMCorral's Picks 2":40.62,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":40.62},"198":{"AndrewMCorral's Picks 2":47.66,"Mick is the Pick":19.53,"Eleff18's Picks 1":32.81},"199":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":18.75,"Eleff18's Picks 1":53.12},"200":{"AndrewMCorral's Picks 2":50.0,"Mobleys to the moon's Picks 1":50.0},"201":{"AndrewMCorral's Picks 2":50.0,"Mobleys to the moon's Picks 1":50.0},"202":{"AndrewMCorral's Picks 2":62.5,"Sampsonites":3.12,"Eleff18's Picks 1":28.12,"catmasqueaks":6.25},"203":{"AndrewMCorral's Picks 2":50.0,"Sampsonites":3.12,"Eleff18's Picks 1":40.62,"catmasqueaks":6.25},"204":{"AndrewMCorral's Picks 2":50.0,"Mobleys to the moon's Picks 1":50.0},"205":{"AndrewMCorral's Picks 2":50.0,"Mobleys to the moon's Picks 1":50.0},"206":{"AndrewMCorral's Picks 2":62.5,"Sampsonites":3.12,"Eleff18's Picks 1":28.12,"catmasqueaks":6.25},"207":{"AndrewMCorral's Picks 2":50.0,"Sampsonites":3.12,"Eleff18's Picks 1":40.62,"catmasqueaks":6.25},"208":{"AndrewMCorral's Picks 2":37.5,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":37.5},"209":{"AndrewMCorral's Picks 2":37.5,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":37.5},"210":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":25.0,"Eleff18's Picks 1":31.25},"211":{"AndrewMCorral's Picks 2":25.0,"Mick is the Pick":25.0,"Eleff18's Picks 1":50.0},"212":{"AndrewMCorral's Picks 2":37.5,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":37.5},"213":{"AndrewMCorral's Picks 2":37.5,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":37.5},"214":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":25.0,"Eleff18's Picks 1":31.25},"215":{"AndrewMCorral's Picks 2":25.0,"Mick is the Pick":25.0,"Eleff18's Picks 1":50.0},"216":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":9.38,"Mobleys to the moon's Picks 1":43.75},"217":{"AndrewMCorral's Picks 2":43.75,"Sampsonites":15.62,"Mobleys to the moon's Picks 1":40.62},"218":{"AndrewMCorral's Picks 2":53.12,"Sampsonites":15.62,"Eleff18's Picks 1":25.0,"catmasqueaks":6.25},"219":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":21.88,"Eleff18's Picks 1":37.5,"catmasqueaks":6.25},"220":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":9.38,"Mobleys to the moon's Picks 1":43.75},"221":{"AndrewMCorral's Picks 2":43.75,"Sampsonites":15.62,"Mobleys to the moon's Picks 1":40.62},"222":{"AndrewMCorral's Picks 2":53.12,"Sampsonites":15.62,"Eleff18's Picks 1":25.0,"catmasqueaks":6.25},"223":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":21.88,"Eleff18's Picks 1":37.5,"catmasqueaks":6.25},"224":{"AndrewMCorral's Picks 2":31.25,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75},"225":{"AndrewMCorral's Picks 2":31.25,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75},"226":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":16.41,"Eleff18's Picks 1":35.16,"eloeb10's Picks 1":4.69},"227":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":16.41,"Eleff18's Picks 1":55.47},"228":{"AndrewMCorral's Picks 2":31.25,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75},"229":{"AndrewMCorral's Picks 2":31.25,"Mick is the Pick":18.75,"Mobleys to the moon's Picks 1":31.25,"eloeb10's Picks 1":18.75},"230":{"AndrewMCorral's Picks 2":43.75,"Mick is the Pick":16.41,"Eleff18's Picks 1":35.16,"eloeb10's Picks 1":4.69},"231":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":16.41,"Eleff18's Picks 1":55.47},"232":{"AndrewMCorral's Picks 2":37.5,"Mobleys to the moon's Picks 1":37.5,"eloeb10's Picks 1":25.0},"233":{"AndrewMCorral's Picks 2":37.5,"Mobleys to the moon's Picks 1":37.5,"eloeb10's Picks 1":25.0},"234":{"AndrewMCorral's Picks 2":56.25,"Sampsonites":3.12,"Eleff18's Picks 1":34.38,"eloeb10's Picks 1":6.25},"235":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":3.12,"Eleff18's Picks 1":46.88,"eloeb10's Picks 1":3.12},"236":{"AndrewMCorral's Picks 2":37.5,"Mobleys to the moon's Picks 1":37.5,"eloeb10's Picks 1":25.0},"237":{"AndrewMCorral's Picks 2":37.5,"Mobleys to the moon's Picks 1":37.5,"eloeb10's Picks 1":25.0},"238":{"AndrewMCorral's Picks 2":56.25,"Sampsonites":3.12,"Eleff18's Picks 1":34.38,"eloeb10's Picks 1":6.25},"239":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":3.12,"Eleff18's Picks 1":46.88,"eloeb10's Picks 1":3.12},"240":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"241":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"242":{"AndrewMCorral's Picks 2":39.06,"Mick is the Pick":21.88,"Eleff18's Picks 1":34.38,"eloeb10's Picks 1":4.69},"243":{"AndrewMCorral's Picks 2":25.0,"Mick is the Pick":21.88,"Eleff18's Picks 1":53.12},"244":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"245":{"AndrewMCorral's Picks 2":28.12,"Mick is the Pick":25.0,"Mobleys to the moon's Picks 1":28.12,"eloeb10's Picks 1":18.75},"246":{"AndrewMCorral's Picks 2":39.06,"Mick is the Pick":21.88,"Eleff18's Picks 1":34.38,"eloeb10's Picks 1":4.69},"247":{"AndrewMCorral's Picks 2":25.0,"Mick is the Pick":21.88,"Eleff18's Picks 1":53.12},"248":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":8.59,"Mobleys to the moon's Picks 1":32.03,"eloeb10's Picks 1":25.0},"249":{"AndrewMCorral's Picks 2":31.25,"Sampsonites":14.06,"Mobleys to the moon's Picks 1":29.69,"eloeb10's Picks 1":25.0},"250":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":15.62,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"251":{"AndrewMCorral's Picks 2":32.81,"Sampsonites":21.88,"Eleff18's Picks 1":43.75,"eloeb10's Picks 1":1.56},"252":{"AndrewMCorral's Picks 2":34.38,"Sampsonites":8.59,"Mobleys to the moon's Picks 1":32.03,"eloeb10's Picks 1":25.0},"253":{"AndrewMCorral's Picks 2":31.25,"Sampsonites":14.06,"Mobleys to the moon's Picks 1":29.69,"eloeb10's Picks 1":25.0},"254":{"AndrewMCorral's Picks 2":46.88,"Sampsonites":15.62,"Eleff18's Picks 1":31.25,"eloeb10's Picks 1":6.25},"255":{"AndrewMCorral's Picks 2":32.81,"Sampsonites":21.88,"Eleff18's Picks 1":43.75,"eloeb10's Picks 1":1.56}};
+
+/* === ESPN LIVE SCORES === */
+const ESPN_TEAM_IDS = {
+  DUKE:150, SJU:2599, MSU:127, CONN:41, IOWA:2294, NEB:158,
+  ILL:356, HOU:248, ARIZ:12, ARK:8, TEX:251, PUR:2509,
+  MICH:130, ALA:333, TENN:2633, ISU:66
+};
+const ESPN_ABBREV_MAP = {
+  'DUKE':'DUKE','ST':'SJU','STJOHNS':'SJU','MIST':'MSU','MICH ST':'MSU','MSU':'MSU',
+  'CONN':'CONN','UCONN':'CONN','IOWA':'IOWA','NEB':'NEB','ILL':'ILL',
+  'HOU':'HOU','ARIZ':'ARIZ','ARK':'ARK','TEX':'TEX','PUR':'PUR',
+  'MICH':'MICH','ALA':'ALA','TENN':'TENN','ISU':'ISU','IONA':'SJU'
+};
+// Map ESPN team IDs to our abbreviations
+const ESPN_ID_TO_ABBREV = {};
+for (const [abbr, id] of Object.entries(ESPN_TEAM_IDS)) ESPN_ID_TO_ABBREV[id] = abbr;
+
+const ESPN_GAME_DATES = {
+  5:'20260326', 2:'20260326', 4:'20260326', 3:'20260326',
+  0:'20260327', 6:'20260327', 1:'20260327', 7:'20260327'
+};
+
+let liveScoreCache = {};
+let liveInterval = null;
+
+function logoURL(teamAbbrev) {
+  const id = ESPN_TEAM_IDS[teamAbbrev];
+  return id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
+}
+
+function findESPNGame(events, slotTeamA, slotTeamB) {
+  for (const ev of events) {
+    const comp = ev.competitions && ev.competitions[0];
+    if (!comp) continue;
+    const teams = comp.competitors.map(c => {
+      const tid = parseInt(c.team.id);
+      return ESPN_ID_TO_ABBREV[tid] || c.team.abbreviation.toUpperCase();
+    });
+    if ((teams.includes(slotTeamA) && teams.includes(slotTeamB)) ||
+        (teams[0] === slotTeamA && teams[1] === slotTeamB) ||
+        (teams[0] === slotTeamB && teams[1] === slotTeamA)) {
+      return comp;
+    }
+  }
+  return null;
+}
+
+async function fetchESPNScores() {
+  const dates = [...new Set(Object.values(ESPN_GAME_DATES))];
+  let allEvents = [];
+  for (const d of dates) {
+    try {
+      const resp = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=${d}`);
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      if (data.events) allEvents = allEvents.concat(data.events);
+    } catch(e) { console.warn('ESPN fetch error for', d, e); }
+  }
+  return allEvents;
+}
+
+function updateLiveScoreboard(slot, comp) {
+  const sb = document.getElementById(`liveScore-${slot}`);
+  if (!sb) return;
+  sb.classList.remove('hidden');
+
+  const [teamA, teamB] = SLOT_TEAMS[slot];
+  // Set logos
+  document.getElementById(`liveLogoA-${slot}`).src = logoURL(teamA);
+  document.getElementById(`liveLogoB-${slot}`).src = logoURL(teamB);
+
+  // Find scores by matching team IDs
+  let scoreA = '—', scoreB = '—';
+  for (const c of comp.competitors) {
+    const tid = parseInt(c.team.id);
+    const abbr = ESPN_ID_TO_ABBREV[tid];
+    if (abbr === teamA) scoreA = c.score || '0';
+    else if (abbr === teamB) scoreB = c.score || '0';
+  }
+  document.getElementById(`liveScoreA-${slot}`).textContent = scoreA;
+  document.getElementById(`liveScoreB-${slot}`).textContent = scoreB;
+
+  // Clock & status
+  const clockEl = document.getElementById(`liveClock-${slot}`);
+  const status = comp.status;
+  const statusName = status.type.name;
+  const clockDiv = clockEl.querySelector('.live-clock');
+  const periodDiv = clockEl.querySelector('.live-period');
+
+  clockEl.className = 'live-center';
+  if (statusName === 'STATUS_FINAL') {
+    clockDiv.textContent = 'FINAL';
+    periodDiv.textContent = '';
+    clockEl.classList.add('live-status-final');
+  } else if (statusName === 'STATUS_HALFTIME') {
+    clockDiv.textContent = 'HALFTIME';
+    periodDiv.textContent = '';
+    clockEl.classList.add('live-status-halftime');
+  } else if (statusName === 'STATUS_IN_PROGRESS') {
+    clockDiv.textContent = status.displayClock || '';
+    const period = status.period || 0;
+    periodDiv.textContent = period === 1 ? '1st Half' : period === 2 ? '2nd Half' : period > 2 ? 'OT' + (period > 3 ? ' ' + (period - 2) : '') : '';
+  } else {
+    // Scheduled / Pre-game
+    clockDiv.textContent = status.type.shortDetail || 'Scheduled';
+    periodDiv.textContent = '';
+    clockEl.classList.add('live-status-pregame');
+  }
+
+  // Updated timestamp
+  const updEl = document.getElementById(`liveUpdated-${slot}`);
+  if (updEl) {
+    const now = new Date();
+    updEl.textContent = 'Last updated: ' + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  }
+}
+
+async function pollESPN() {
+  try {
+    const events = await fetchESPNScores();
+    if (!events.length) return;
+
+    // Update each slot
+    for (let slot = 0; slot < 8; slot++) {
+      const [teamA, teamB] = SLOT_TEAMS[slot];
+      const comp = findESPNGame(events, teamA, teamB);
+      if (!comp) continue;
+
+      liveScoreCache[slot] = comp;
+
+      // Only update the scoreboard for the currently viewed game
+      const sel = document.getElementById('gameSelect');
+      if (sel && parseInt(sel.value) === slot) {
+        updateLiveScoreboard(slot, comp);
+      }
+
+      // If game just went final and not already in RESULTS, auto-update via lookup
+      const statusName = comp.status.type.name;
+      if (statusName === 'STATUS_FINAL' && !(String(slot) in RESULTS)) {
+        // Determine winner
+        let winnerAbbr = null;
+        let highScore = -1;
+        for (const c of comp.competitors) {
+          const s = parseInt(c.score || 0);
+          if (s > highScore) {
+            highScore = s;
+            const tid = parseInt(c.team.id);
+            winnerAbbr = ESPN_ID_TO_ABBREV[tid] || c.team.abbreviation.toUpperCase();
+          }
+        }
+        if (winnerAbbr && (winnerAbbr === teamA || winnerAbbr === teamB)) {
+          RESULTS[String(slot)] = winnerAbbr;
+          applyLookupUpdate();
+        }
+      }
+    }
+  } catch(e) { console.warn('ESPN poll error', e); }
+}
+
+function applyLookupUpdate() {
+  // Compute 8-bit combo from current results
+  if (!LOOKUP || Object.keys(LOOKUP).length === 0) return;
+  let combo = 0;
+  let allDecided = true;
+  for (let slot = 0; slot < 8; slot++) {
+    const r = RESULTS[String(slot)];
+    if (!r) { allDecided = false; continue; }
+    if (r === SLOT_TEAMS[slot][1]) combo |= (1 << slot);
+  }
+
+  // Update bracket win percentages in dropdown
+  if (allDecided) {
+    const entry = LOOKUP[String(combo)] || {};
+    for (const name of BDATA.bracket_order) {
+      const b = BDATA.brackets[name];
+      if (!b) continue;
+      b.win_pct = entry[name] || 0;
+      b.alive = b.win_pct > 0;
+    }
+    // Re-render current bracket
+    if (currentBracket) {
+      const name = currentBracket.name;
+      currentBracket = BDATA.brackets[name];
+      renderStats();
+    }
+    // Update dropdown labels
+    const sel = document.getElementById("bracketSelect");
+    for (const opt of sel.options) {
+      const b = BDATA.brackets[opt.value];
+      if (b) opt.textContent = b.alive ? `${opt.value} (${b.win_pct}% win rate)` : `${opt.value} — ELIMINATED`;
+    }
+  }
+
+  // Refresh game overview
+  const gameSel = document.getElementById('gameSelect');
+  if (gameSel) {
+    // Update game select labels
+    for (const opt of gameSel.options) {
+      const s = opt.value;
+      if (String(s) in RESULTS) {
+        const g = GAMES[s];
+        const w = RESULTS[String(s)];
+        opt.textContent = `${DAY_LABELS[s]} — ${g.team_a} vs ${g.team_b} ✓ ${w} wins`;
+      }
+    }
+    // Re-render results bar
+    const list = document.getElementById("resultsList");
+    let chips = '';
+    for (const slot of GAME_ORDER) {
+      if (String(slot) in RESULTS) {
+        const w = RESULTS[String(slot)];
+        const [a, b] = SLOT_TEAMS[slot];
+        chips += `<span class="result-chip">${w} def. ${w === a ? b : a}</span>`;
+      }
+    }
+    list.innerHTML = chips;
+    document.getElementById('resultsBar').classList.add('visible');
+  }
+}
+
+function startESPNPolling() {
+  pollESPN();  // immediate first fetch
+  liveInterval = setInterval(pollESPN, 60000);  // every 60 seconds
+}
+
+// Show live scoreboard when switching games if we have cached data
+const origSwitchGame = switchGame;
+switchGame = function(slot) {
+  origSwitchGame(slot);
+  if (liveScoreCache[slot]) {
+    updateLiveScoreboard(slot, liveScoreCache[slot]);
+  }
+};
+
 /* === INIT === */
 initBracket();
 initGame();
+startESPNPolling();
 </script>
 </body>
 </html>
