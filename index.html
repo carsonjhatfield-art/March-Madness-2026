@@ -428,12 +428,47 @@ function renderInsights() {
   const b = currentBracket;
   const cards = document.getElementById("insightCards");
   let html = "";
+
+  // Must-Win E8
   const mustWin = [];
-  for (let i = 0; i < 4; i++) { const e = Object.entries(b.e8_pct[i]); if (e.length === 1) mustWin.push({team: e[0][0], game: MATCHUPS[i].label}); }
+  for (let i = 0; i < 4; i++) { const e = Object.entries(b.e8_pct[i]); if (e.length === 1 && e[0][1] > 0) mustWin.push({team: e[0][0], game: MATCHUPS[i].label}); }
   html += `<div class="insight-card"><h3>Must-Win in Elite 8</h3><p>${mustWin.length > 0 ? mustWin.map(m => `<span class="hl">${m.team}</span> (${m.game})`).join("<br>") : '<span class="dim">No single E8 game requires a specific winner in every path.</span>'}</p></div>`;
+
+  // Elimination Risks
   html += `<div class="insight-card"><h3>Elimination Risks (E8)</h3><p>${b.e8_elimination.length > 0 ? b.e8_elimination.map(e => `<span class="danger">${e.eliminates_if_wins}</span> winning = <span class="danger">ELIMINATED</span>`).join("<br>") : '<span class="hl">No E8 result can eliminate this bracket.</span>'}</p></div>`;
+
+  // Final Four Requirements
+  const f4Reqs = [];
+  for (let i = 0; i < 2; i++) {
+    const entries = Object.entries(b.f4_pct[i]);
+    if (entries.length === 1 && entries[0][1] > 0) {
+      f4Reqs.push({team: entries[0][0], side: i === 0 ? "Left" : "Right"});
+    }
+  }
+  let f4Html = '';
+  if (!b.alive) {
+    f4Html = '<span class="dim">Bracket eliminated.</span>';
+  } else if (f4Reqs.length > 0) {
+    f4Html = f4Reqs.map(r => `<span class="hl">${r.team}</span> must make the Final Four`).join("<br>");
+  } else {
+    f4Html = '<span class="dim">Multiple F4 paths still open — no locked-in requirement.</span>';
+  }
+  html += `<div class="insight-card"><h3>Final Four Requirements</h3><p>${f4Html}</p></div>`;
+
+  // Championship Requirements
   const ce = Object.entries(b.champ_pct).sort((a,b_) => b_[1] - a[1]);
-  html += `<div class="insight-card"><h3>Championship Path</h3><p>${ce.map(([t,p]) => `<span class="hl">${t}</span> ${p}%`).join(", ")}<br><span class="dim">Pick: ${b.champion}</span></p></div>`;
+  let champHtml = '';
+  if (!b.alive) {
+    champHtml = '<span class="dim">Bracket eliminated.</span>';
+  } else if (ce.length === 1) {
+    champHtml = `<span class="danger">${ce[0][0]}</span> must win <span class="danger">ALL remaining games</span> for this bracket to win the group`;
+  } else if (ce.length > 0) {
+    champHtml = ce.map(([t,p]) => `<span class="hl">${t}</span> ${p}%`).join(", ");
+  } else {
+    champHtml = '<span class="dim">No championship paths remaining.</span>';
+  }
+  html += `<div class="insight-card"><h3>Championship Requirements</h3><p>${champHtml}</p></div>`;
+
   cards.innerHTML = html;
 }
 
