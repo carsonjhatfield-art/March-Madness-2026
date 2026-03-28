@@ -398,9 +398,8 @@ function renderBracketGrid() {
   // Col 0: Left E8 (East + South)
   html += `<div class="col"><div class="round-header">Elite 8</div><div class="region-tag">East</div>`;
   html += bracketGameNodeHTML("e8_0", b.e8_pct[0], [MATCHUPS[0].team_a, MATCHUPS[0].team_b], b.e8_picks[0], 0 in elimLookup, elimLookup[0], false, e8decided(0));
-  html += `<div class="spacer-e8"></div>`;
+  html += `<div class="spacer-e8"></div><div class="region-tag">South</div>`;
   html += bracketGameNodeHTML("e8_1", b.e8_pct[1], [MATCHUPS[1].team_a, MATCHUPS[1].team_b], b.e8_picks[1], 1 in elimLookup, elimLookup[1], false, e8decided(1));
-  html += `<div class="region-tag" style="margin-top:16px;">South</div>`;
   html += `</div>`;
   // Col 1: Left F4
   html += `<div class="col"><div class="round-header">Final Four</div><div style="height:80px;"></div>`;
@@ -417,9 +416,8 @@ function renderBracketGrid() {
   // Col 4: Right E8 (West + Midwest)
   html += `<div class="col"><div class="round-header">Elite 8</div><div class="region-tag">West</div>`;
   html += bracketGameNodeHTML("e8_2", b.e8_pct[2], [MATCHUPS[2].team_a, MATCHUPS[2].team_b], b.e8_picks[2], 2 in elimLookup, elimLookup[2], false, e8decided(2));
-  html += `<div class="spacer-e8"></div>`;
+  html += `<div class="spacer-e8"></div><div class="region-tag">Midwest</div>`;
   html += bracketGameNodeHTML("e8_3", b.e8_pct[3], [MATCHUPS[3].team_a, MATCHUPS[3].team_b], b.e8_picks[3], 3 in elimLookup, elimLookup[3], false, e8decided(3));
-  html += `<div class="region-tag" style="margin-top:16px;">Midwest</div>`;
   html += `</div>`;
   grid.innerHTML = html;
 }
