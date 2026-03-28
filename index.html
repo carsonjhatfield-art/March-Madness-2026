@@ -437,7 +437,7 @@ function renderInsights() {
   // Elimination Risks
   html += `<div class="insight-card"><h3>Elimination Risks (E8)</h3><p>${b.e8_elimination.length > 0 ? b.e8_elimination.map(e => `<span class="danger">${e.eliminates_if_wins}</span> winning = <span class="danger">ELIMINATED</span>`).join("<br>") : '<span class="hl">No E8 result can eliminate this bracket.</span>'}</p></div>`;
 
-  // Final Four Requirements
+  // Final Four Requirements — which teams must WIN their F4 game
   const f4Reqs = [];
   for (let i = 0; i < 2; i++) {
     const entries = Object.entries(b.f4_pct[i]);
@@ -449,7 +449,7 @@ function renderInsights() {
   if (!b.alive) {
     f4Html = '<span class="dim">Bracket eliminated.</span>';
   } else if (f4Reqs.length > 0) {
-    f4Html = f4Reqs.map(r => `<span class="hl">${r.team}</span> must make the Final Four`).join("<br>");
+    f4Html = f4Reqs.map(r => `<span class="hl">${r.team}</span> must win their Final Four game`).join("<br>");
   } else {
     f4Html = '<span class="dim">Multiple F4 paths still open — no locked-in requirement.</span>';
   }
