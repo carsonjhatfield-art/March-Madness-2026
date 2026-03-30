@@ -69,8 +69,8 @@
   .scroll-hint { text-align: center; color: #4b5563; font-size: 11px; padding: 4px 0 8px; }
 
   .bracket-grid {
-    display: grid; grid-template-columns: 190px 190px 160px 190px 190px;
-    gap: 0; align-items: start; justify-content: center; min-width: 960px;
+    display: grid; grid-template-columns: 200px 180px 200px;
+    gap: 0; align-items: start; justify-content: center; min-width: 580px;
   }
   .col { display: flex; flex-direction: column; }
   .col-center { display: flex; flex-direction: column; justify-content: center; align-items: stretch; }
@@ -227,21 +227,13 @@
   <div class="stats-bar" id="statsBar"></div>
   <div class="dead-banner" id="deadBanner">
     <h2>Eliminated From Contention</h2>
-    <p>This bracket has zero remaining paths to winning the group. No combination of results can put them in first place.</p>
-  </div>
-  <div class="elimination-banner" id="elimBanner">
-    <h3>Elite 8 Elimination Risk</h3>
-    <div id="elimGames"></div>
-  </div>
-  <div class="safe-banner" id="safeBanner">
-    <p>No single Elite 8 result can eliminate this bracket — all 4 outcomes keep at least some winning paths alive.</p>
+    <p>This bracket has zero remaining paths to winning the group. No combination of Final Four and Championship results can put them in first place.</p>
   </div>
   <div class="bracket-legend">
     <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div> Must win (100%)</div>
     <div class="legend-item"><div class="legend-dot" style="background:#22c55e;opacity:0.6;"></div> Strong requirement (>50%)</div>
     <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> Flexible — wins in some paths</div>
     <div class="legend-item"><div class="legend-dot" style="background:#6b7280;"></div> Not in any winning path</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div> If this team wins → bracket eliminated</div>
     <div class="legend-item" style="color:#60a5fa;">★ = Bracket's pick</div>
   </div>
   <div class="bracket-container">
@@ -277,7 +269,7 @@
 <div class="footer">BUSTin Bracketz 2026 — Generated March 28, 2026</div>
 
 <script>
-const BDATA = {"brackets":{"AndrewMCorral's Picks 2":{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","current_pts":770,"champion":"Duke","tiebreaker_score":145,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","ALA","ISU"],"e8_picks":["DUKE","HOU","ARIZ","ALA"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Mick is the Pick":{"name":"Mick is the Pick","owner":"Austin Donley","current_pts":890,"champion":"Michigan","tiebreaker_score":135,"outright_wins":3,"tiebreak_wins":0,"total_scenarios":3,"win_pct":37.5,"s16_picks":["DUKE","UCLA","FLA","ILL","ARIZ","GONZ","MICH","ISU"],"e8_picks":["DUKE","ILL","ARIZ","MICH"],"f4_picks":["ILL","MICH"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"ILL":100.0},{"ARIZ":33.3,"MICH":66.7}],"champ_pct":{"ILL":66.7,"MICH":33.3},"e8_elimination":[],"min_score":1050,"max_score":1530,"alive":true},"Sampsonites":{"name":"Sampsonites","owner":"Harrison Jung","current_pts":790,"champion":"Houston","tiebreaker_score":150,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","VAN","HOU","ARK","PUR","MICH","UVA"],"e8_picks":["CONN","HOU","ARK","MICH"],"f4_picks":["HOU","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Charlie Kirk's Bracket":{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","current_pts":850,"champion":"Michigan","tiebreaker_score":156,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Mobleys to the moon's Picks 1":{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","current_pts":750,"champion":"Arizona","tiebreaker_score":141,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","HOU","ARIZ","ISU"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Eleff18's Picks 1":{"name":"Eleff18's Picks 1","owner":"ethan leff","current_pts":810,"champion":"UConn","tiebreaker_score":129,"outright_wins":2,"tiebreak_wins":0,"total_scenarios":2,"win_pct":25.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","ALA","ISU"],"e8_picks":["CONN","FLA","ARIZ","ISU"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":100.0},{"ARIZ":50.0,"MICH":50.0}],"champ_pct":{"CONN":100.0},"e8_elimination":[],"min_score":1290,"max_score":1450,"alive":true},"eloeb10's Picks 1":{"name":"eloeb10's Picks 1","owner":"Eric Loeb","current_pts":670,"champion":"Duke","tiebreaker_score":129,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","VAN","HOU","ARIZ","PUR","MICH","UVA"],"e8_picks":["DUKE","HOU","PUR","MICH"],"f4_picks":["DUKE","PUR"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"catmasqueaks":{"name":"catmasqueaks","owner":"Catherine Maceo","current_pts":870,"champion":"Arizona","tiebreaker_score":120,"outright_wins":2,"tiebreak_wins":0,"total_scenarios":2,"win_pct":25.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","GONZ","MICH","ISU"],"e8_picks":["CONN","HOU","ARIZ","MICH"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":50.0,"ILL":50.0},{"ARIZ":100.0}],"champ_pct":{"ARIZ":100.0},"e8_elimination":[],"min_score":1350,"max_score":1510,"alive":true},"Carson Hatfield's Picks 1":{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","current_pts":840,"champion":"Arizona","tiebreaker_score":115,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","ILL","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"gabem222's Picks 1":{"name":"gabem222's Picks 1","owner":"gabe Maceo","current_pts":820,"champion":"Michigan","tiebreaker_score":130,"outright_wins":1,"tiebreak_wins":0,"total_scenarios":1,"win_pct":12.5,"s16_picks":["DUKE","CONN","VAN","HOU","ARIZ","GONZ","MICH","UVA"],"e8_picks":["CONN","HOU","ARIZ","MICH"],"f4_picks":["CONN","MICH"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":100.0},{"MICH":100.0}],"champ_pct":{"MICH":100.0},"e8_elimination":[],"min_score":1460,"max_score":1460,"alive":true},"deppeb's Picks 1":{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","current_pts":740,"champion":"Arizona","tiebreaker_score":121,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","UCLA","VAN","HOU","ARIZ","PUR","MICH","UVA"],"e8_picks":["DUKE","HOU","ARIZ","MICH"],"f4_picks":["HOU","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Nick Barbarino's Picks 3":{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","current_pts":820,"champion":"Duke","tiebreaker_score":150,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","HOU","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Niclad":{"name":"Niclad","owner":"Nicole Laduca","current_pts":820,"champion":"Arizona","tiebreaker_score":null,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Choice":{"name":"Choice","owner":"Justin Farshidi","current_pts":780,"champion":"Duke","tiebreaker_score":141,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","GONZ","MICH","UVA"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"Gabys Picks":{"name":"Gabys Picks","owner":"Nick Barbarino","current_pts":640,"champion":"Duke","tiebreaker_score":140,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","GONZ","MICH","ISU"],"e8_picks":["DUKE","HOU","GONZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false},"tyoung2848's Picks 1":{"name":"tyoung2848's Picks 1","owner":"Tyler Young","current_pts":750,"champion":"Arizona","tiebreaker_score":125,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["CONN","FLA","ARIZ","ISU"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"min_score":0,"max_score":0,"alive":false}},"bracket_order":["Mick is the Pick","Eleff18's Picks 1","catmasqueaks","gabem222's Picks 1","AndrewMCorral's Picks 2","Sampsonites","Charlie Kirk's Bracket","Mobleys to the moon's Picks 1","eloeb10's Picks 1","Carson Hatfield's Picks 1","deppeb's Picks 1","Nick Barbarino's Picks 3","Niclad","Choice","Gabys Picks","tyoung2848's Picks 1"],"e8_matchups":[{"team_a":"DUKE","team_b":"CONN","region":"East","label":"DUKE vs CONN"},{"team_a":"IOWA","team_b":"ILL","region":"South","label":"IOWA vs ILL"},{"team_a":"ARIZ","team_b":"PUR","region":"West","label":"ARIZ vs PUR"},{"team_a":"MICH","team_b":"TENN","region":"Midwest","label":"MICH vs TENN"}]};
+const BDATA = {"brackets":{"AndrewMCorral's Picks 2":{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","current_pts":770,"champion":"Duke","tiebreaker_score":145,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","ALA","ISU"],"e8_picks":["DUKE","HOU","ARIZ","ALA"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Mick is the Pick":{"name":"Mick is the Pick","owner":"Austin Donley","current_pts":890,"champion":"Michigan","tiebreaker_score":135,"outright_wins":3,"tiebreak_wins":0,"total_scenarios":3,"win_pct":37.5,"s16_picks":["DUKE","UCLA","FLA","ILL","ARIZ","GONZ","MICH","ISU"],"e8_picks":["DUKE","ILL","ARIZ","MICH"],"f4_picks":["ILL","MICH"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"ILL":100.0},{"ARIZ":33.3,"MICH":66.7}],"champ_pct":{"ILL":66.7,"MICH":33.3},"e8_elimination":[],"winning_scenarios":[{"f4":["ILL","ARIZ"],"champ":"ILL","score":1050},{"f4":["ILL","MICH"],"champ":"ILL","score":1210},{"f4":["ILL","MICH"],"champ":"MICH","score":1530}],"min_score":1050,"max_score":1530,"alive":true},"Sampsonites":{"name":"Sampsonites","owner":"Harrison Jung","current_pts":790,"champion":"Houston","tiebreaker_score":150,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","VAN","HOU","ARK","PUR","MICH","UVA"],"e8_picks":["CONN","HOU","ARK","MICH"],"f4_picks":["HOU","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Charlie Kirk's Bracket":{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","current_pts":850,"champion":"Michigan","tiebreaker_score":156,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Mobleys to the moon's Picks 1":{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","current_pts":750,"champion":"Arizona","tiebreaker_score":141,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","HOU","ARIZ","ISU"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Eleff18's Picks 1":{"name":"Eleff18's Picks 1","owner":"ethan leff","current_pts":810,"champion":"UConn","tiebreaker_score":129,"outright_wins":2,"tiebreak_wins":0,"total_scenarios":2,"win_pct":25.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","ALA","ISU"],"e8_picks":["CONN","FLA","ARIZ","ISU"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":100.0},{"ARIZ":50.0,"MICH":50.0}],"champ_pct":{"CONN":100.0},"e8_elimination":[],"winning_scenarios":[{"f4":["CONN","ARIZ"],"champ":"CONN","score":1450},{"f4":["CONN","MICH"],"champ":"CONN","score":1290}],"min_score":1290,"max_score":1450,"alive":true},"eloeb10's Picks 1":{"name":"eloeb10's Picks 1","owner":"Eric Loeb","current_pts":670,"champion":"Duke","tiebreaker_score":129,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","VAN","HOU","ARIZ","PUR","MICH","UVA"],"e8_picks":["DUKE","HOU","PUR","MICH"],"f4_picks":["DUKE","PUR"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"catmasqueaks":{"name":"catmasqueaks","owner":"Catherine Maceo","current_pts":870,"champion":"Arizona","tiebreaker_score":120,"outright_wins":2,"tiebreak_wins":0,"total_scenarios":2,"win_pct":25.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","GONZ","MICH","ISU"],"e8_picks":["CONN","HOU","ARIZ","MICH"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":50.0,"ILL":50.0},{"ARIZ":100.0}],"champ_pct":{"ARIZ":100.0},"e8_elimination":[],"winning_scenarios":[{"f4":["CONN","ARIZ"],"champ":"ARIZ","score":1510},{"f4":["ILL","ARIZ"],"champ":"ARIZ","score":1350}],"min_score":1350,"max_score":1510,"alive":true},"Carson Hatfield's Picks 1":{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","current_pts":840,"champion":"Arizona","tiebreaker_score":115,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","ILL","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"gabem222's Picks 1":{"name":"gabem222's Picks 1","owner":"gabe Maceo","current_pts":820,"champion":"Michigan","tiebreaker_score":130,"outright_wins":1,"tiebreak_wins":0,"total_scenarios":1,"win_pct":12.5,"s16_picks":["DUKE","CONN","VAN","HOU","ARIZ","GONZ","MICH","UVA"],"e8_picks":["CONN","HOU","ARIZ","MICH"],"f4_picks":["CONN","MICH"],"e8_pct":[{"CONN":100.0},{"ILL":100.0},{"ARIZ":100.0},{"MICH":100.0}],"f4_pct":[{"CONN":100.0},{"MICH":100.0}],"champ_pct":{"MICH":100.0},"e8_elimination":[],"winning_scenarios":[{"f4":["CONN","MICH"],"champ":"MICH","score":1460}],"min_score":1460,"max_score":1460,"alive":true},"deppeb's Picks 1":{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","current_pts":740,"champion":"Arizona","tiebreaker_score":121,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","UCLA","VAN","HOU","ARIZ","PUR","MICH","UVA"],"e8_picks":["DUKE","HOU","ARIZ","MICH"],"f4_picks":["HOU","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Nick Barbarino's Picks 3":{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","current_pts":820,"champion":"Duke","tiebreaker_score":150,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","HOU","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Niclad":{"name":"Niclad","owner":"Nicole Laduca","current_pts":820,"champion":"Arizona","tiebreaker_score":null,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Choice":{"name":"Choice","owner":"Justin Farshidi","current_pts":780,"champion":"Duke","tiebreaker_score":141,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","GONZ","MICH","UVA"],"e8_picks":["DUKE","FLA","ARIZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"Gabys Picks":{"name":"Gabys Picks","owner":"Nick Barbarino","current_pts":640,"champion":"Duke","tiebreaker_score":140,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","MSU","FLA","HOU","ARIZ","GONZ","MICH","ISU"],"e8_picks":["DUKE","HOU","GONZ","MICH"],"f4_picks":["DUKE","MICH"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false},"tyoung2848's Picks 1":{"name":"tyoung2848's Picks 1","owner":"Tyler Young","current_pts":750,"champion":"Arizona","tiebreaker_score":125,"outright_wins":0,"tiebreak_wins":0,"total_scenarios":0,"win_pct":0.0,"s16_picks":["DUKE","CONN","FLA","HOU","ARIZ","PUR","MICH","ISU"],"e8_picks":["CONN","FLA","ARIZ","ISU"],"f4_picks":["CONN","ARIZ"],"e8_pct":[{},{},{},{}],"f4_pct":[{},{}],"champ_pct":{},"e8_elimination":[],"winning_scenarios":[],"min_score":0,"max_score":0,"alive":false}},"bracket_order":["Mick is the Pick","Eleff18's Picks 1","catmasqueaks","gabem222's Picks 1","AndrewMCorral's Picks 2","Sampsonites","Charlie Kirk's Bracket","Mobleys to the moon's Picks 1","eloeb10's Picks 1","Carson Hatfield's Picks 1","deppeb's Picks 1","Nick Barbarino's Picks 3","Niclad","Choice","Gabys Picks","tyoung2848's Picks 1"],"e8_matchups":[{"team_a":"DUKE","team_b":"CONN","region":"East","label":"DUKE vs CONN"},{"team_a":"IOWA","team_b":"ILL","region":"South","label":"IOWA vs ILL"},{"team_a":"ARIZ","team_b":"PUR","region":"West","label":"ARIZ vs PUR"},{"team_a":"MICH","team_b":"TENN","region":"Midwest","label":"MICH vs TENN"}]};
 const GAMES = [{"slot":0,"region":"East","label":"DUKE vs CONN","team_a":"DUKE","team_b":"CONN","owners":[{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Duke","alive":false},{"name":"Mick is the Pick","owner":"Austin Donley","a_pct":0,"b_pct":100.0,"pick":"DUKE","elim_if":"DUKE","champion":"Michigan","alive":true},{"name":"Sampsonites","owner":"Harrison Jung","a_pct":0.0,"b_pct":0.0,"pick":"CONN","elim_if":null,"champion":"Houston","alive":false},{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Michigan","alive":false},{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Arizona","alive":false},{"name":"Eleff18's Picks 1","owner":"ethan leff","a_pct":0,"b_pct":100.0,"pick":"CONN","elim_if":"DUKE","champion":"UConn","alive":true},{"name":"eloeb10's Picks 1","owner":"Eric Loeb","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Duke","alive":false},{"name":"catmasqueaks","owner":"Catherine Maceo","a_pct":0,"b_pct":100.0,"pick":"CONN","elim_if":"DUKE","champion":"Arizona","alive":true},{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Arizona","alive":false},{"name":"gabem222's Picks 1","owner":"gabe Maceo","a_pct":0,"b_pct":100.0,"pick":"CONN","elim_if":"DUKE","champion":"Michigan","alive":true},{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Arizona","alive":false},{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Duke","alive":false},{"name":"Niclad","owner":"Nicole Laduca","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Arizona","alive":false},{"name":"Choice","owner":"Justin Farshidi","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Duke","alive":false},{"name":"Gabys Picks","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"DUKE","elim_if":null,"champion":"Duke","alive":false},{"name":"tyoung2848's Picks 1","owner":"Tyler Young","a_pct":0.0,"b_pct":0.0,"pick":"CONN","elim_if":null,"champion":"Arizona","alive":false}]},{"slot":1,"region":"South","label":"IOWA vs ILL","team_a":"IOWA","team_b":"ILL","owners":[{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Duke","alive":false},{"name":"Mick is the Pick","owner":"Austin Donley","a_pct":0,"b_pct":100.0,"pick":"ILL","elim_if":"IOWA","champion":"Michigan","alive":true},{"name":"Sampsonites","owner":"Harrison Jung","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Houston","alive":false},{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","a_pct":0.0,"b_pct":0.0,"pick":"FLA","elim_if":null,"champion":"Michigan","alive":false},{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Arizona","alive":false},{"name":"Eleff18's Picks 1","owner":"ethan leff","a_pct":0,"b_pct":100.0,"pick":"FLA","elim_if":"IOWA","champion":"UConn","alive":true},{"name":"eloeb10's Picks 1","owner":"Eric Loeb","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Duke","alive":false},{"name":"catmasqueaks","owner":"Catherine Maceo","a_pct":0,"b_pct":100.0,"pick":"HOU","elim_if":"IOWA","champion":"Arizona","alive":true},{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","a_pct":0.0,"b_pct":0.0,"pick":"FLA","elim_if":null,"champion":"Arizona","alive":false},{"name":"gabem222's Picks 1","owner":"gabe Maceo","a_pct":0,"b_pct":100.0,"pick":"HOU","elim_if":"IOWA","champion":"Michigan","alive":true},{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Arizona","alive":false},{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Duke","alive":false},{"name":"Niclad","owner":"Nicole Laduca","a_pct":0.0,"b_pct":0.0,"pick":"FLA","elim_if":null,"champion":"Arizona","alive":false},{"name":"Choice","owner":"Justin Farshidi","a_pct":0.0,"b_pct":0.0,"pick":"FLA","elim_if":null,"champion":"Duke","alive":false},{"name":"Gabys Picks","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"HOU","elim_if":null,"champion":"Duke","alive":false},{"name":"tyoung2848's Picks 1","owner":"Tyler Young","a_pct":0.0,"b_pct":0.0,"pick":"FLA","elim_if":null,"champion":"Arizona","alive":false}]},{"slot":2,"region":"West","label":"ARIZ vs PUR","team_a":"ARIZ","team_b":"PUR","owners":[{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Duke","alive":false},{"name":"Mick is the Pick","owner":"Austin Donley","a_pct":100.0,"b_pct":0,"pick":"ARIZ","elim_if":"PUR","champion":"Michigan","alive":true},{"name":"Sampsonites","owner":"Harrison Jung","a_pct":0.0,"b_pct":0.0,"pick":"ARK","elim_if":null,"champion":"Houston","alive":false},{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Michigan","alive":false},{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Arizona","alive":false},{"name":"Eleff18's Picks 1","owner":"ethan leff","a_pct":100.0,"b_pct":0,"pick":"ARIZ","elim_if":"PUR","champion":"UConn","alive":true},{"name":"eloeb10's Picks 1","owner":"Eric Loeb","a_pct":0.0,"b_pct":0.0,"pick":"PUR","elim_if":null,"champion":"Duke","alive":false},{"name":"catmasqueaks","owner":"Catherine Maceo","a_pct":100.0,"b_pct":0,"pick":"ARIZ","elim_if":"PUR","champion":"Arizona","alive":true},{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Arizona","alive":false},{"name":"gabem222's Picks 1","owner":"gabe Maceo","a_pct":100.0,"b_pct":0,"pick":"ARIZ","elim_if":"PUR","champion":"Michigan","alive":true},{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Arizona","alive":false},{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Duke","alive":false},{"name":"Niclad","owner":"Nicole Laduca","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Arizona","alive":false},{"name":"Choice","owner":"Justin Farshidi","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Duke","alive":false},{"name":"Gabys Picks","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"GONZ","elim_if":null,"champion":"Duke","alive":false},{"name":"tyoung2848's Picks 1","owner":"Tyler Young","a_pct":0.0,"b_pct":0.0,"pick":"ARIZ","elim_if":null,"champion":"Arizona","alive":false}]},{"slot":3,"region":"Midwest","label":"MICH vs TENN","team_a":"MICH","team_b":"TENN","owners":[{"name":"AndrewMCorral's Picks 2","owner":"Andrew Montenegro","a_pct":0.0,"b_pct":0.0,"pick":"ALA","elim_if":null,"champion":"Duke","alive":false},{"name":"Mick is the Pick","owner":"Austin Donley","a_pct":100.0,"b_pct":0,"pick":"MICH","elim_if":"TENN","champion":"Michigan","alive":true},{"name":"Sampsonites","owner":"Harrison Jung","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Houston","alive":false},{"name":"Charlie Kirk's Bracket","owner":"Shaq Deezy","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Michigan","alive":false},{"name":"Mobleys to the moon's Picks 1","owner":"tom nendick","a_pct":0.0,"b_pct":0.0,"pick":"ISU","elim_if":null,"champion":"Arizona","alive":false},{"name":"Eleff18's Picks 1","owner":"ethan leff","a_pct":100.0,"b_pct":0,"pick":"ISU","elim_if":"TENN","champion":"UConn","alive":true},{"name":"eloeb10's Picks 1","owner":"Eric Loeb","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Duke","alive":false},{"name":"catmasqueaks","owner":"Catherine Maceo","a_pct":100.0,"b_pct":0,"pick":"MICH","elim_if":"TENN","champion":"Arizona","alive":true},{"name":"Carson Hatfield's Picks 1","owner":"Carson Hatfield","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Arizona","alive":false},{"name":"gabem222's Picks 1","owner":"gabe Maceo","a_pct":100.0,"b_pct":0,"pick":"MICH","elim_if":"TENN","champion":"Michigan","alive":true},{"name":"deppeb's Picks 1","owner":"Pedraam Mirzanian","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Arizona","alive":false},{"name":"Nick Barbarino's Picks 3","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Duke","alive":false},{"name":"Niclad","owner":"Nicole Laduca","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Arizona","alive":false},{"name":"Choice","owner":"Justin Farshidi","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Duke","alive":false},{"name":"Gabys Picks","owner":"Nick Barbarino","a_pct":0.0,"b_pct":0.0,"pick":"MICH","elim_if":null,"champion":"Duke","alive":false},{"name":"tyoung2848's Picks 1","owner":"Tyler Young","a_pct":0.0,"b_pct":0.0,"pick":"ISU","elim_if":null,"champion":"Arizona","alive":false}]}];
 const RESULTS = {"1":"ILL","2":"ARIZ","0":"CONN","3":"MICH"};
 const GAME_ORDER = [1,2,0,3];
@@ -319,7 +311,7 @@ function switchBracket(name) {
   } else {
     deadBanner.classList.remove("visible");
   }
-  renderStats(); renderElimBanner(); renderBracketGrid(); renderInsights();
+  renderStats(); renderBracketGrid(); renderInsights();
 }
 
 function renderStats() {
@@ -328,21 +320,8 @@ function renderStats() {
     <div class="stat"><div class="val">${b.current_pts}</div><div class="label">Current PTS</div></div>
     <div class="stat"><div class="val">${b.champion}</div><div class="label">Champion Pick</div></div>
     <div class="stat"><div class="val">${b.win_pct}%</div><div class="label">Win Rate</div></div>
-    <div class="stat"><div class="val">${b.total_scenarios.toLocaleString()}</div><div class="label">Win Scenarios</div></div>
-    <div class="stat"><div class="val">${b.outright_wins.toLocaleString()}</div><div class="label">Outright</div></div>
-    <div class="stat"><div class="val">${b.tiebreak_wins.toLocaleString()}</div><div class="label">Tiebreak</div></div>
-    <div class="stat"><div class="val">${b.e8_elimination.length}</div><div class="label">Elim Games</div></div>
+    <div class="stat"><div class="val">${b.outright_wins} / 8</div><div class="label">Win Scenarios</div></div>
     <div class="stat"><div class="val">${b.min_score}–${b.max_score}</div><div class="label">Score Range</div></div>`;
-}
-
-function renderElimBanner() {
-  const b = currentBracket;
-  const banner = document.getElementById("elimBanner");
-  const safe = document.getElementById("safeBanner");
-  const games = document.getElementById("elimGames");
-  if (b.e8_elimination.length === 0) { banner.classList.remove("visible"); safe.classList.add("visible"); return; }
-  safe.classList.remove("visible"); banner.classList.add("visible");
-  games.innerHTML = b.e8_elimination.map(e => `<div class="elim-game"><span class="elim-region">${e.region}</span><span class="elim-detail">If <span class="eliminates">${e.eliminates_if_wins}</span> beats ${e.must_win} → bracket is <span class="eliminates">ELIMINATED</span>. <span class="must-win">${e.must_win} MUST WIN</span></span></div>`).join('');
 }
 
 function bracketTeamRowHTML(team, pct, pick, elimTeam, decided) {
@@ -390,34 +369,25 @@ function bracketGameNodeHTML(id, pctData, allTeams, pick, isElimGame, elimIfWins
 function renderBracketGrid() {
   const b = currentBracket;
   const grid = document.getElementById("bracketGrid");
-  const elimLookup = {};
-  for (const e of b.e8_elimination) elimLookup[e.game] = e.eliminates_if_wins;
 
-  const e8decided = (i) => RESULTS[String(i)] || null;
+  // F4 matchup teams (from locked E8 results)
+  const f4_0_teams = [RESULTS["0"] || MATCHUPS[0].team_a, RESULTS["1"] || MATCHUPS[1].team_a];
+  const f4_1_teams = [RESULTS["2"] || MATCHUPS[2].team_a, RESULTS["3"] || MATCHUPS[3].team_a];
+
   let html = "";
-  // Col 0: Left E8 (East + South)
-  html += `<div class="col"><div class="round-header">Elite 8</div><div class="region-tag">East</div>`;
-  html += bracketGameNodeHTML("e8_0", b.e8_pct[0], [MATCHUPS[0].team_a, MATCHUPS[0].team_b], b.e8_picks[0], 0 in elimLookup, elimLookup[0], false, e8decided(0));
-  html += `<div class="spacer-e8"></div><div class="region-tag">South</div>`;
-  html += bracketGameNodeHTML("e8_1", b.e8_pct[1], [MATCHUPS[1].team_a, MATCHUPS[1].team_b], b.e8_picks[1], 1 in elimLookup, elimLookup[1], false, e8decided(1));
+  // Col 0: Left F4 (East/South winner)
+  html += `<div class="col"><div class="round-header">Final Four</div>`;
+  html += `<div class="region-tag">${f4_0_teams[0]} vs ${f4_0_teams[1]}</div>`;
+  html += bracketGameNodeHTML("f4_0", b.f4_pct[0], f4_0_teams, b.f4_picks[0], false, null, false, null);
   html += `</div>`;
-  // Col 1: Left F4
-  html += `<div class="col"><div class="round-header">Final Four</div><div style="height:80px;"></div>`;
-  html += bracketGameNodeHTML("f4_0", b.f4_pct[0], null, b.f4_picks[0], false, null, false, null);
-  html += `</div>`;
-  // Col 2: Championship
-  html += `<div class="col-center"><div class="round-header" style="color:#f97316;">Championship</div><div style="height:150px;"></div>`;
+  // Col 1: Championship
+  html += `<div class="col-center"><div class="round-header" style="color:#f97316;">Championship</div><div style="height:40px;"></div>`;
   html += bracketGameNodeHTML("champ", b.champ_pct, null, b.champion, false, null, true, null);
   html += `</div>`;
-  // Col 3: Right F4
-  html += `<div class="col"><div class="round-header">Final Four</div><div style="height:80px;"></div>`;
-  html += bracketGameNodeHTML("f4_1", b.f4_pct[1], null, b.f4_picks[1], false, null, false, null);
-  html += `</div>`;
-  // Col 4: Right E8 (West + Midwest)
-  html += `<div class="col"><div class="round-header">Elite 8</div><div class="region-tag">West</div>`;
-  html += bracketGameNodeHTML("e8_2", b.e8_pct[2], [MATCHUPS[2].team_a, MATCHUPS[2].team_b], b.e8_picks[2], 2 in elimLookup, elimLookup[2], false, e8decided(2));
-  html += `<div class="spacer-e8"></div><div class="region-tag">Midwest</div>`;
-  html += bracketGameNodeHTML("e8_3", b.e8_pct[3], [MATCHUPS[3].team_a, MATCHUPS[3].team_b], b.e8_picks[3], 3 in elimLookup, elimLookup[3], false, e8decided(3));
+  // Col 2: Right F4 (West/Midwest winner)
+  html += `<div class="col"><div class="round-header">Final Four</div>`;
+  html += `<div class="region-tag">${f4_1_teams[0]} vs ${f4_1_teams[1]}</div>`;
+  html += bracketGameNodeHTML("f4_1", b.f4_pct[1], f4_1_teams, b.f4_picks[1], false, null, false, null);
   html += `</div>`;
   grid.innerHTML = html;
 }
@@ -427,45 +397,65 @@ function renderInsights() {
   const cards = document.getElementById("insightCards");
   let html = "";
 
-  // Must-Win E8
-  const mustWin = [];
-  for (let i = 0; i < 4; i++) { const e = Object.entries(b.e8_pct[i]); if (e.length === 1 && e[0][1] > 0) mustWin.push({team: e[0][0], game: MATCHUPS[i].label}); }
-  html += `<div class="insight-card"><h3>Must-Win in Elite 8</h3><p>${mustWin.length > 0 ? mustWin.map(m => `<span class="hl">${m.team}</span> (${m.game})`).join("<br>") : '<span class="dim">No single E8 game requires a specific winner in every path.</span>'}</p></div>`;
+  if (!b.alive) {
+    html += `<div class="insight-card"><h3>Status</h3><p><span class="danger">ELIMINATED</span> — No remaining scenario results in this bracket winning the group.</p></div>`;
+    cards.innerHTML = html;
+    return;
+  }
 
-  // Elimination Risks
-  html += `<div class="insight-card"><h3>Elimination Risks (E8)</h3><p>${b.e8_elimination.length > 0 ? b.e8_elimination.map(e => `<span class="danger">${e.eliminates_if_wins}</span> winning = <span class="danger">ELIMINATED</span>`).join("<br>") : '<span class="hl">No E8 result can eliminate this bracket.</span>'}</p></div>`;
+  // Winning Paths — enumerate the specific scenarios this bracket wins
+  const scenarios = b.winning_scenarios || [];
+  const totalScenarios = 8;
+  html += `<div class="insight-card" style="grid-column: 1 / -1;"><h3>Paths to Win (${b.outright_wins} of ${totalScenarios} scenarios)</h3>`;
+  if (scenarios.length > 0) {
+    html += `<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:8px; margin-top:6px;">`;
+    for (const s of scenarios) {
+      html += `<div style="background:#0d1117; border:1px solid #1f2937; border-radius:6px; padding:10px;">`;
+      html += `<div style="font-size:11px; color:#4b5563; margin-bottom:4px;">Scenario</div>`;
+      html += `<div style="font-size:13px;"><span class="hl">${s.f4[0]}</span> wins F4</div>`;
+      html += `<div style="font-size:13px;"><span class="hl">${s.f4[1]}</span> wins F4</div>`;
+      html += `<div style="font-size:13px; margin-top:4px;"><span style="color:#f97316; font-weight:700;">${s.champ}</span> wins Championship</div>`;
+      html += `<div style="font-size:11px; color:#6b7280; margin-top:4px;">${s.score} pts</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  } else {
+    html += `<p><span class="dim">No winning scenarios found.</span></p>`;
+  }
+  html += `</div>`;
 
-  // Final Four Requirements — which teams must WIN their F4 game
+  // Requirements Summary — what MUST happen
   const f4Reqs = [];
   for (let i = 0; i < 2; i++) {
     const entries = Object.entries(b.f4_pct[i]);
     if (entries.length === 1 && entries[0][1] > 0) {
-      f4Reqs.push({team: entries[0][0], side: i === 0 ? "Left" : "Right"});
+      f4Reqs.push(entries[0][0]);
     }
   }
-  let f4Html = '';
-  if (!b.alive) {
-    f4Html = '<span class="dim">Bracket eliminated.</span>';
-  } else if (f4Reqs.length > 0) {
-    f4Html = f4Reqs.map(r => `<span class="hl">${r.team}</span> must win their Final Four game`).join("<br>");
-  } else {
-    f4Html = '<span class="dim">Multiple F4 paths still open — no locked-in requirement.</span>';
-  }
-  html += `<div class="insight-card"><h3>Final Four Requirements</h3><p>${f4Html}</p></div>`;
+  const champEntries = Object.entries(b.champ_pct).sort((a,b_) => b_[1] - a[1]);
 
-  // Championship Requirements
-  const ce = Object.entries(b.champ_pct).sort((a,b_) => b_[1] - a[1]);
-  let champHtml = '';
-  if (!b.alive) {
-    champHtml = '<span class="dim">Bracket eliminated.</span>';
-  } else if (ce.length === 1) {
-    champHtml = `<span class="danger">${ce[0][0]}</span> must win <span class="danger">ALL remaining games</span> for this bracket to win the group`;
-  } else if (ce.length > 0) {
-    champHtml = ce.map(([t,p]) => `<span class="hl">${t}</span> ${p}%`).join(", ");
+  let reqHtml = '';
+  if (f4Reqs.length === 2 && champEntries.length === 1) {
+    reqHtml = `<span class="danger">${champEntries[0][0]}</span> must win all remaining games (F4 + Championship)`;
   } else {
-    champHtml = '<span class="dim">No championship paths remaining.</span>';
+    const parts = [];
+    if (f4Reqs.length > 0) {
+      parts.push(f4Reqs.map(t => `<span class="hl">${t}</span> must win their F4 game`).join("<br>"));
+    }
+    if (champEntries.length === 1) {
+      parts.push(`<span class="hl">${champEntries[0][0]}</span> must win the Championship`);
+    } else if (champEntries.length > 1) {
+      parts.push(`Champion can be: ${champEntries.map(([t,p]) => `<span class="hl">${t}</span> (${p}%)`).join(", ")}`);
+    }
+    if (parts.length === 0) {
+      parts.push('<span class="dim">Multiple paths remain — no single locked-in requirement.</span>');
+    }
+    reqHtml = parts.join("<br>");
   }
-  html += `<div class="insight-card"><h3>Championship Requirements</h3><p>${champHtml}</p></div>`;
+  html += `<div class="insight-card"><h3>Requirements</h3><p>${reqHtml}</p></div>`;
+
+  // Win Probability
+  html += `<div class="insight-card"><h3>Win Probability</h3><p style="font-size:24px; font-weight:700; color:#4ade80;">${b.win_pct}%</p><p style="font-size:11px; color:#6b7280;">${b.outright_wins} outright win${b.outright_wins !== 1 ? 's' : ''} out of ${totalScenarios} remaining scenarios</p></div>`;
 
   cards.innerHTML = html;
 }
